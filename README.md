@@ -13,10 +13,10 @@ It does not work in browsers where the [fetch API](https://caniuse.com/fetch) is
 ---
 
 ```js
-// import distribution file before make GooglePublicSheetsParser instance. (see /dist/index.js)
+// import distribution file before make PublicGoogleSheetsParser instance. (see /dist/index.js)
 
 const sheetsId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
-const parser = new GooglePublicSheetsParser(sheetsId)
+const parser = new PublicGoogleSheetsParser(sheetsId)
 parser.parse().then((items) => {
   console.log(items) // [{ a: 1, b: 2, c: 3}, { a: 4, b: 5, c: 6 }, ...]
 })

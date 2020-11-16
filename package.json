@@ -1,6 +1,6 @@
 {
   "name": "public-google-sheets-parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Public Google sheets parser for browser",
   "main": "./dist/index.js",
   "repository": {
@@ -11,7 +11,10 @@
     "spreadsheets",
     "google sheet"
   ],
-  "author": "fureweb-com",
+  "author": {
+    "name": "fureweb",
+    "email": "fureweb.com@gmail.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/fureweb-com/public-google-sheets-parser.git"

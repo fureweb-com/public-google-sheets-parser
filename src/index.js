@@ -1,4 +1,4 @@
-class GooglePublicSheetsParser {
+class PublicGoogleSheetsParser {
   constructor(sheetsId) {
     if (!sheetsId) throw new Error('SheetId is required.')
     this.id = sheetsId
