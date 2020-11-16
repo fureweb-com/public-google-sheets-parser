@@ -55,3 +55,5 @@ class PublicGoogleSheetsParser {
     return this.getItems(response)
   }
 }
+
+globalThis.PublicGoogleSheetsParser = PublicGoogleSheetsParser
