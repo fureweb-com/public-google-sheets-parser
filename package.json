@@ -1,0 +1,20 @@
+{
+  "name": "public-google-sheets-parser",
+  "version": "1.0.0",
+  "description": "Public Google sheets parser for browser",
+  "main": "./dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fureweb-com/public-google-sheets-parser.git"
+  },
+  "keywords": [
+    "spreadsheets",
+    "google sheet"
+  ],
+  "author": "fureweb-com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fureweb-com/public-google-sheets-parser.git"
+  },
+  "homepage": "https://github.com/fureweb-com/public-google-sheets-parser.git"
+}
