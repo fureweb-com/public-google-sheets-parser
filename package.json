@@ -1,8 +1,8 @@
 {
   "name": "public-google-sheets-parser",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Public Google sheets parser for browser",
-  "main": "./dist/index.js",
+  "main": "./src/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fureweb-com/public-google-sheets-parser.git"
@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/fureweb-com/public-google-sheets-parser.git"
   },
-  "homepage": "https://github.com/fureweb-com/public-google-sheets-parser.git"
+  "homepage": "https://github.com/fureweb-com/public-google-sheets-parser.git",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
 }

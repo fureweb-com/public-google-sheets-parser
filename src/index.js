@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 class PublicGoogleSheetsParser {
   constructor(sheetsId) {
     if (!sheetsId) throw new Error('SheetId is required.')
@@ -56,4 +58,4 @@ class PublicGoogleSheetsParser {
   }
 }
 
-globalThis.PublicGoogleSheetsParser = PublicGoogleSheetsParser
+module.exports = PublicGoogleSheetsParser
