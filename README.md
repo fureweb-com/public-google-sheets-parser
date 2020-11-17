@@ -27,7 +27,7 @@ parser.parse().then((items) => {
 
 - browser
 ```html
-<script src="https://cdn.jsdelivr.net/npm/public-google-sheets-parser@1.0.6/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/public-google-sheets-parser@1.0.9/src/index.min.js"></script>
 
 <script>
 const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
