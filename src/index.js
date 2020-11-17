@@ -49,13 +49,11 @@ class PublicGoogleSheetsParser {
   }
 
   async parse() {
-    const response = await this.getSheetsData()
+    const spreadsheetResponse = await this.getSheetsData()
 
-    if (response === null) {
-      return new Error(`Invalid sheets ID: ${this.id}`)
-    }
+    if (spreadsheetResponse === null) return []
 
-    return this.getItems(response)
+    return this.getItems(spreadsheetResponse)
   }
 }
 
