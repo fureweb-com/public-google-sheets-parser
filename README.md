@@ -10,8 +10,6 @@ It does not work in browsers where the [fetch API](https://caniuse.com/fetch) is
 
 **No API key required.** This means that the server does not need to use the private key to use the SDK.
 
-**Currently, it is only available in the browser through the distribution file. I will update the content in the example when I check when it was uploaded to the CDN.**
-
 ### Demo page
 [Click here](http://fureweb.com/public-google-sheets-parser.html)
 

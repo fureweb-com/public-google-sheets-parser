@@ -1,4 +1,5 @@
-const fetch = require('node-fetch');
+const isBrowser = !!globalThis.window
+const fetch = isBrowser ? window.fetch : require('node-fetch')
 
 class PublicGoogleSheetsParser {
   constructor(sheetsId) {
@@ -58,4 +59,9 @@ class PublicGoogleSheetsParser {
   }
 }
 
-module.exports = PublicGoogleSheetsParser
+if (isBrowser) {
+  window.PublicGoogleSheetsParser = PublicGoogleSheetsParser
+} else {
+  module.exports = PublicGoogleSheetsParser
+  module.exports.default = PublicGoogleSheetsParser
+}
