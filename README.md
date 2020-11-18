@@ -11,7 +11,7 @@ It does not work in browsers where the [fetch API](https://caniuse.com/fetch) is
 **No API key required.** This means that the server does not need to use the private key to use the SDK.
 
 You can also use it via free API. Please see [this documentation](https://api.fureweb.com).
-If you have a public spreadsheet document, and the first column is a header and you have more than one column of data, you can call it free of charge through this API and use the result as a JSON response.
+If you have a public spreadsheet document, and the first row is a header and you have more than one row of data, you can call it free of charge through this API and use the result as a JSON response.
 
 ### Demo page
 [Click here](http://fureweb.com/public-google-sheets-parser.html)
