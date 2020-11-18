@@ -10,6 +10,9 @@ It does not work in browsers where the [fetch API](https://caniuse.com/fetch) is
 
 **No API key required.** This means that the server does not need to use the private key to use the SDK.
 
+You can also use it via free API. Please see [this documentation](https://api.fureweb.com).
+If you have a public spreadsheet document, and the first column is a header and you have more than one column of data, you can call it free of charge through this API and use the result as a JSON response.
+
 ### Demo page
 [Click here](http://fureweb.com/public-google-sheets-parser.html)
 
@@ -17,6 +20,7 @@ It does not work in browsers where the [fetch API](https://caniuse.com/fetch) is
 - Node.js
 ```js
 const PublicGoogleSheetsParser = require('public-google-sheets-parser')
+
 const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
 const parser = new PublicGoogleSheetsParser(spreadsheetId)
 parser.parse().then((items) => {
@@ -39,5 +43,13 @@ parser.parse().then((items) => {
 </script>
 ```
 
+- free API ([documentation](https://api.fureweb.com))
+
+```sh
+curl -X GET "https://api.fureweb.com/spreadsheets/10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps" -H "accept: */*"
+
+# response (application/json)
+{"data":[{"a":1,"b":2,"c":3},{"a":4,"b":5,"c":6},{"a":7,"b":8,"c":9}]}
+```
 **That's it!**
 
