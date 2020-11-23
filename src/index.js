@@ -1,4 +1,4 @@
-const isBrowser = !!globalThis.window
+const isBrowser = typeof require === 'undefined'
 const fetch = isBrowser ? window.fetch : require('node-fetch')
 
 class PublicGoogleSheetsParser {
