@@ -1,3 +1,7 @@
+const isBrowser = !!globalThis.window
+const fetch = isBrowser ? window.fetch : require('node-fetch')
+
+
 const Data = class {
   async getSheetsData() {
       const json = await this._getSheetsData();
@@ -83,4 +87,9 @@ const PublicGoogleSheetsParser = (() => {
 })()
 
 
-
+if (isBrowser) {
+  window.PublicGoogleSheetsParser = PublicGoogleSheetsParser
+} else {
+  module.exports = PublicGoogleSheetsParser
+  module.exports.default = PublicGoogleSheetsParser
+}
