@@ -53,12 +53,12 @@ You can use any of the three methods you want!
 
 - browser
 ```html
-<script src="https://cdn.jsdelivr.net/npm/public-google-sheets-parser@1.0.9/src/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/public-google-sheets-parser@1.0.17/src/index.min.js"></script>
 
 <script>
 const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
-const parser = new PublicGoogleSheetsParser(spreadsheetId)
-parser.parse().then((items) => {
+const parser = new PublicGoogleSheetsParser()
+parser.parse(spreadsheetId).then((items) => {
   // items should be [{"a":1,"b":2,"c":3},{"a":4,"b":5,"c":6},{"a":7,"b":8,"c":9}]
 })
 </script>
