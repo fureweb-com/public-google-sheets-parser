@@ -20,6 +20,8 @@
   <script src="../src/index.js"></script>
 
   <script>
+
+    
     (() => {
       const showResult = (string) => {
         document.querySelector('.result').innerHTML = JSON.stringify(string)
@@ -31,12 +33,18 @@
           window.alert('Please insert your public spreadsheet ID')
           return spreadsheetIdElement.focus()
         }
+        
+        //Data Load
+        const getSheet = new SheetData(spreadsheetIdElement.value.trim());
 
-        const parser = new PublicGoogleSheetsParser(spreadsheetIdElement.value.trim())
-        parser.parse().then((items) => {
-          // items should be [{ a :1, b :2, c :3 },{ a :4, b :5, c :6 },{ a :7, b :8, c :9 }]
+        //Create instance
+        const sheetParser = new PublicGoogleSheetsParser();
+
+        //Data parser
+        sheetParser.parse(getSheet).then(items => {
           showResult(items)
         })
+
       }
       document.querySelector('.get-items').onclick = getItems
     })()

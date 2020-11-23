@@ -1,65 +1,86 @@
-const isBrowser = typeof require === 'undefined'
-const fetch = isBrowser ? window.fetch : require('node-fetch')
-
-class PublicGoogleSheetsParser {
-  constructor(sheetsId) {
-    if (!sheetsId) throw new Error('SheetId is required.')
-    this.id = sheetsId
+const Data = class {
+  async getSheetsData() {
+      const json = await this._getSheetsData();
+      return new GetItem(json)
   }
+  async _getSheetsData() {throw '__getSheetsData must override'}
+}
 
-  getSheetsData() {
-    // Read data from the first sheet of the target document.
-    // It cannot be used unless everyone has been given read permission.
-    // It must be a spreadsheet document with a header, as in the example document below.
-    // spreadsheet document for example: https://docs.google.com/spreadsheets/d/10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps/edit#gid=1719755213
-    return fetch(`https://docs.google.com/spreadsheets/d/${this.id}/gviz/tq?`)
+const SheetData = class extends Data {
+  constructor(sheetId) {
+      super();
+      this.id = sheetId
+  }
+  async _getSheetsData() {
+      return fetch(`https://docs.google.com/spreadsheets/d/${this.id}/gviz/tq?`)
       .then((r) => r.ok ? r.text() : null)
       .catch((_) => null)
   }
+}
 
-  filterUselessRows(rows) {
-    return rows.filter((row) => row && (row.v !== null && row.v !== undefined))
+
+const GetItem = class {
+  constructor(spreadsheetResponse) {
+      if(typeof spreadsheetResponse !== 'string') throw 'invalid type';
+      this.spreadsheetResponse = spreadsheetResponse;
   }
+  get sheetItemString() {
+      return this.spreadsheetResponse
+  }
+}
 
-  applyHeaderIntoRows(header, rows) {
-    return rows
-      .map(({ c: row }) => this.filterUselessRows(row))
+
+const Parser = class {
+  async parse(data) {
+      if (!(data instanceof Data)) throw 'invalid data type';
+      this._item = await data.getSheetsData();        
+      return this._parse()
+  }
+  _parse() {
+      throw '_parse must override'
+  }
+}
+
+
+const PublicGoogleSheetsParser = (() => {
+
+  const filterUselessRows = (rows) => {
+      return rows.filter((row) => row && (row.v !== null && row.v !== undefined))
+  }
+  const applyHeaderIntoRows = (header, rows) => {
+      return rows
+      .map(({ c: row }) => filterUselessRows(row))
       .map((row) => row.reduce((p, c, i) => Object.assign(p, { [header[i]]: c.v }), {}))
-  }
-
-  getItems(spreadsheetResponse) {
-    let rows = []
-
-    try {
-      const parsedJSON = JSON.parse(spreadsheetResponse.split('\n')[1].replace(/google.visualization.Query.setResponse\(|\)\;/g, ''))
-      const hasLabelPropertyInCols = parsedJSON.table.cols.every(({ label }) => !!label)
-      if (hasLabelPropertyInCols) {
-        const header = parsedJSON.table.cols.map(({ label }) => label)
-
-        rows = this.applyHeaderIntoRows(header, parsedJSON.table.rows)
-      } else {
-        const [headerRow, ...originalRows] = parsedJSON.table.rows
-        const header = this.filterUselessRows(headerRow.c).map((row) => row.v)
-
-        rows = this.applyHeaderIntoRows(header, originalRows)
+  } 
+  return class extends Parser {
+      constructor() {
+          super();
       }
-    } catch (e) {}
+      async _parse() {
+          const {spreadsheetResponse} =  this._item;
+          if (spreadsheetResponse === null) return [];
 
-    return rows
+          let rows = []
+          try {
+              const parsedJSON = JSON.parse(spreadsheetResponse.split('\n')[1].replace(/google.visualization.Query.setResponse\(|\)\;/g, ''))
+              
+              const hasLabelPropertyInCols = parsedJSON.table.cols.every(({ label }) => !!label)
+              
+              if (hasLabelPropertyInCols) {
+                  const header = parsedJSON.table.cols.map(({ label }) => label)
+                  rows = applyHeaderIntoRows(header, parsedJSON.table.rows)
+              } else {
+                  const [headerRow, ...originalRows] = parsedJSON.table.rows
+                  const header = filterUselessRows(headerRow.c).map((row) => row.v)
+                  rows = applyHeaderIntoRows(header, originalRows)
+              }
+          } catch (e) {
+              throw e
+          }
+          return rows
+      }
   }
+})()
 
-  async parse() {
-    const spreadsheetResponse = await this.getSheetsData()
 
-    if (spreadsheetResponse === null) return []
 
-    return this.getItems(spreadsheetResponse)
-  }
-}
-
-if (isBrowser) {
-  window.PublicGoogleSheetsParser = PublicGoogleSheetsParser
-} else {
-  module.exports = PublicGoogleSheetsParser
-  module.exports.default = PublicGoogleSheetsParser
-}
