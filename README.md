@@ -24,12 +24,32 @@ If you have a public spreadsheet document, and the first row is a header and you
 const PublicGoogleSheetsParser = require('public-google-sheets-parser')
 
 const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
+
+// 1. You can pass spreadsheetId when parser instantiation
 const parser = new PublicGoogleSheetsParser(spreadsheetId)
 parser.parse().then((items) => {
-  // items should be [{ a: 1, b: 2, c: 3}, { a: 4, b: 5, c: 6 }, ...]
-  console.log(items)
+  // items should be [{"a":1,"b":2,"c":3},{"a":4,"b":5,"c":6},{"a":7,"b":8,"c":9}]
+})
+
+// 2. You can change spreadsheetId on runtime
+const anotherSpreadsheetId = '1oCgY0UHHRQ95snw7URFpOOL_DQcVG_wydlOoGiTof5E'
+parser.id = anotherSpreadsheetId
+parser.parse().then((items) => {
+  /* items should be
+  [
+    {"id":1,"title":"This is a title of 1","description":"This is a description of 1","createdAt":"2020-11-12","modifiedAt":"2020-11-18"},
+    {"id":2,"title":"This is a title of 2","description":"This is a description of 2","createdAt":"2020-11-12","modifiedAt":"2020-11-18"},
+    ...
+  ]
+  */
+})
+
+// 3. You can pass the spreadsheet ID when call parse method.
+parser.parse(spreadsheetId).then((items) => {
+  // items should be [{"a":1,"b":2,"c":3},{"a":4,"b":5,"c":6},{"a":7,"b":8,"c":9}]
 })
 ```
+You can use any of the three methods you want!
 
 - browser
 ```html
@@ -39,8 +59,7 @@ parser.parse().then((items) => {
 const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
 const parser = new PublicGoogleSheetsParser(spreadsheetId)
 parser.parse().then((items) => {
-  // items should be [{ a: 1, b: 2, c: 3}, { a: 4, b: 5, c: 6 }, ...]
-  console.log(items)
+  // items should be [{"a":1,"b":2,"c":3},{"a":4,"b":5,"c":6},{"a":7,"b":8,"c":9}]
 })
 </script>
 ```

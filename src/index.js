@@ -2,12 +2,11 @@ const isBrowser = typeof require === 'undefined'
 const fetch = isBrowser ? window.fetch : require('node-fetch')
 
 class PublicGoogleSheetsParser {
-  constructor(sheetsId) {
-    if (!sheetsId) throw new Error('SheetId is required.')
-    this.id = sheetsId
+  constructor(spreadsheetId) {
+    this.id = spreadsheetId
   }
 
-  getSheetsData() {
+  getSpreadsheetDataUsingFetch() {
     // Read data from the first sheet of the target document.
     // It cannot be used unless everyone has been given read permission.
     // It must be a spreadsheet document with a header, as in the example document below.
@@ -48,8 +47,12 @@ class PublicGoogleSheetsParser {
     return rows
   }
 
-  async parse() {
-    const spreadsheetResponse = await this.getSheetsData()
+  async parse(spreadsheetId) {
+    if (spreadsheetId) this.id = spreadsheetId
+
+    if (!this.id) throw new Error('SpreadsheetId is required.')
+
+    const spreadsheetResponse = await this.getSpreadsheetDataUsingFetch()
 
     if (spreadsheetResponse === null) return []
 
