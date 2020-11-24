@@ -2,11 +2,11 @@ const isBrowser = typeof require === 'undefined'
 const fetch = isBrowser ? window.fetch : require('node-fetch')
 
 class PublicGoogleSheetsParser {
-  constructor(spreadsheetId) {
+  constructor (spreadsheetId) {
     this.id = spreadsheetId
   }
 
-  getSpreadsheetDataUsingFetch() {
+  getSpreadsheetDataUsingFetch () {
     // Read data from the first sheet of the target document.
     // It cannot be used unless everyone has been given read permission.
     // It must be a spreadsheet document with a header, as in the example document below.
@@ -16,21 +16,21 @@ class PublicGoogleSheetsParser {
       .catch((_) => null)
   }
 
-  filterUselessRows(rows) {
+  filterUselessRows (rows) {
     return rows.filter((row) => row && (row.v !== null && row.v !== undefined))
   }
 
-  applyHeaderIntoRows(header, rows) {
+  applyHeaderIntoRows (header, rows) {
     return rows
       .map(({ c: row }) => this.filterUselessRows(row))
       .map((row) => row.reduce((p, c, i) => Object.assign(p, { [header[i]]: c.v }), {}))
   }
 
-  getItems(spreadsheetResponse) {
+  getItems (spreadsheetResponse) {
     let rows = []
 
     try {
-      const parsedJSON = JSON.parse(spreadsheetResponse.split('\n')[1].replace(/google.visualization.Query.setResponse\(|\)\;/g, ''))
+      const parsedJSON = JSON.parse(spreadsheetResponse.split('\n')[1].replace(/google.visualization.Query.setResponse\(|\);/g, ''))
       const hasSomeLabelPropertyInCols = parsedJSON.table.cols.some(({ label }) => !!label)
       if (hasSomeLabelPropertyInCols) {
         const header = parsedJSON.table.cols.map(({ label }) => label)
@@ -47,7 +47,7 @@ class PublicGoogleSheetsParser {
     return rows
   }
 
-  async parse(spreadsheetId) {
+  async parse (spreadsheetId) {
     if (spreadsheetId) this.id = spreadsheetId
 
     if (!this.id) throw new Error('SpreadsheetId is required.')

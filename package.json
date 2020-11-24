@@ -1,7 +1,11 @@
 {
   "name": "public-google-sheets-parser",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "Public Google sheets parser",
+  "scripts": {
+    "lint": "eslint --format ./node_modules/eslint-friendly-formatter --ext .js .",
+    "lint:fix": "eslint --format ./node_modules/eslint-friendly-formatter --ext .js . --fix"
+  },
   "main": "./src/index.js",
   "repository": {
     "type": "git",
@@ -22,5 +26,21 @@
   "homepage": "https://github.com/fureweb-com/public-google-sheets-parser.git",
   "dependencies": {
     "node-fetch": "^2.6.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "eslintIgnore": [
+    "node_modules",
+    "package",
+    "example"
+  ],
+  "devDependencies": {
+    "eslint": "^7.14.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "husky": "^4.3.0",
+    "standard": "^16.0.3"
   }
 }
