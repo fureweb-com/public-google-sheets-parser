@@ -1,6 +1,6 @@
 # Public Google sheets parser
 
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](https://standardjs.com)  [![npm package](https://img.shields.io/npm/v/public-google-sheets-parser.svg?maxAge=2592000&style=flat-square)](https://www.npmjs.com/package/public-google-sheets-parser)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](https://standardjs.com)  [![npm package](https://img.shields.io/npm/v/public-google-sheets-parser.svg?cacheSeconds=3600&style=flat-square)](https://www.npmjs.com/package/public-google-sheets-parser)
 
 ![Introduction](introduction.png)
 
