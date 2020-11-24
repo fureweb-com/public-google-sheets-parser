@@ -1,12 +1,15 @@
 {
   "name": "public-google-sheets-parser",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "Public Google sheets parser",
   "scripts": {
+    "build:dist": "npx babel ./src/index.js --out-file ./dist/index.js",
     "lint": "eslint --format ./node_modules/eslint-friendly-formatter --ext .js .",
     "lint:fix": "eslint --format ./node_modules/eslint-friendly-formatter --ext .js . --fix"
   },
-  "main": "./src/index.js",
+  "main": "src/index.js",
+  "unpkg": "dist/index.js",
+  "jsdelivr": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fureweb-com/public-google-sheets-parser.git"
@@ -35,9 +38,14 @@
   "eslintIgnore": [
     "node_modules",
     "package",
-    "example"
+    "example",
+    "dist"
   ],
   "devDependencies": {
+    "@babel/cli": "^7.12.8",
+    "@babel/core": "^7.12.8",
+    "@babel/plugin-transform-async-to-generator": "^7.12.1",
+    "@babel/plugin-transform-classes": "^7.12.1",
     "eslint": "^7.14.0",
     "eslint-friendly-formatter": "^4.0.1",
     "husky": "^4.3.0",
