@@ -31,8 +31,8 @@ class PublicGoogleSheetsParser {
 
     try {
       const parsedJSON = JSON.parse(spreadsheetResponse.split('\n')[1].replace(/google.visualization.Query.setResponse\(|\)\;/g, ''))
-      const hasLabelPropertyInCols = parsedJSON.table.cols.every(({ label }) => !!label)
-      if (hasLabelPropertyInCols) {
+      const hasSomeLabelPropertyInCols = parsedJSON.table.cols.some(({ label }) => !!label)
+      if (hasSomeLabelPropertyInCols) {
         const header = parsedJSON.table.cols.map(({ label }) => label)
 
         rows = this.applyHeaderIntoRows(header, parsedJSON.table.rows)

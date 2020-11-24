@@ -1,6 +1,6 @@
 {
   "name": "public-google-sheets-parser",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "Public Google sheets parser",
   "main": "./src/index.js",
   "repository": {
