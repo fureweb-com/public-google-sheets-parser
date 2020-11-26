@@ -53,6 +53,34 @@ parser.parse(spreadsheetId).then((items) => {
 ```
 You can use any of the three methods you want!
 
+- with import (Vue.js or whatever)
+```js
+// templates...
+
+import PublicGoogleSheetsParser from 'public-google-sheets-parser'
+
+export default {
+  data () {
+    return {
+      items: [],
+    }
+  },
+  computed: {
+    parser () {
+      return new PublicGoogleSheetsParser()
+    },
+  },
+  methods: {
+    async getItems (spreadsheetId) {
+      this.items = await this.parser.parse(spreadsheetId)
+    },
+  },
+}
+
+// styles...
+```
+
+
 - browser
 ```html
 <script src="https://cdn.jsdelivr.net/npm/public-google-sheets-parser@1.0.21/dist/index.min.js"></script>
