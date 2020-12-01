@@ -7,6 +7,8 @@ class PublicGoogleSheetsParser {
   }
 
   getSpreadsheetDataUsingFetch () {
+    if (!this.id) return null
+
     // Read data from the first sheet of the target document.
     // It cannot be used unless everyone has been given read permission.
     // It must be a spreadsheet document with a header, as in the example document below.
