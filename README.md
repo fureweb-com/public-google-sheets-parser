@@ -1,6 +1,10 @@
 # Public Google sheets parser
 
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](https://standardjs.com)  [![npm package](https://img.shields.io/npm/v/public-google-sheets-parser.svg?cacheSeconds=3600&style=flat-square)](https://www.npmjs.com/package/public-google-sheets-parser)
+[![Author](https://img.shields.io/badge/Author-fureweb-blue)]()
+[![npm package](https://img.shields.io/npm/v/public-google-sheets-parser.svg?cacheSeconds=3600&style=flat-square)](https://www.npmjs.com/package/public-google-sheets-parser)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](https://standardjs.com)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ffureweb-com%2Fpublic-google-sheets-parser)]()
+[![GitHub stars](https://img.shields.io/github/stars/fureweb-com/public-google-sheets-parser?color=brightgreen)]()
 
 ![Introduction](introduction.png)
 
