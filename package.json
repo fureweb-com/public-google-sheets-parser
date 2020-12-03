@@ -1,6 +1,6 @@
 {
   "name": "public-google-sheets-parser",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "Get JSONArray from public google sheets with using only spreadsheetId",
   "scripts": {
     "build:dist": "npx babel ./src/index.js --out-file ./dist/index.js",
