@@ -54,6 +54,12 @@ parser.parse().then((items) => {
 parser.parse(spreadsheetId).then((items) => {
   // items should be [{"a":1,"b":2,"c":3},{"a":4,"b":5,"c":6},{"a":7,"b":8,"c":9}]
 })
+
+
+// 4. You can also pass  the name of specific sheet/tab if you want to get that instead of the first one.
+parser.parse(spreadsheetId, "Sheet2").then((items) => {
+  // items should be from the second sheet!
+})
 ```
 You can use any of the three methods you want!
 
