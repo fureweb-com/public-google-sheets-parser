@@ -56,8 +56,8 @@ parser.parse(spreadsheetId).then((items) => {
 })
 
 
-// 4. You can also pass  the name of specific sheet/tab if you want to get that instead of the first one.
-parser.parse(spreadsheetId, "Sheet2").then((items) => {
+// 4. You can also pass  the name of specific sheet if you want to get that instead of the first one.
+parser.parse(spreadsheetId, 'Sheet2').then((items) => {
   // items should be from the second sheet!
 })
 ```
