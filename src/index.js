@@ -2,18 +2,25 @@ const isBrowser = typeof require === 'undefined'
 const fetch = isBrowser ? window.fetch : require('node-fetch')
 
 class PublicGoogleSheetsParser {
-  constructor (spreadsheetId) {
+  constructor (spreadsheetId, tabName) {
     this.id = spreadsheetId
+    this.tab = tabName
   }
 
   getSpreadsheetDataUsingFetch () {
-    if (!this.id) return null
-
     // Read data from the first sheet of the target document.
     // It cannot be used unless everyone has been given read permission.
     // It must be a spreadsheet document with a header, as in the example document below.
     // spreadsheet document for example: https://docs.google.com/spreadsheets/d/10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps/edit#gid=1719755213
-    return fetch(`https://docs.google.com/spreadsheets/d/${this.id}/gviz/tq?`)
+    // Sheet/Tab selection from: https://stackoverflow.com/a/44592363/1649917
+
+    if (!this.id) return null
+    let url = `https://docs.google.com/spreadsheets/d/${this.id}/gviz/tq?`
+    if (this.tab) {
+      url = url.concat(`sheet=${this.tab}`)
+    }
+
+    return fetch(url)
       .then((r) => r.ok ? r.text() : null)
       .catch((_) => null)
   }
@@ -49,8 +56,9 @@ class PublicGoogleSheetsParser {
     return rows
   }
 
-  async parse (spreadsheetId) {
+  async parse (spreadsheetId, tabName) {
     if (spreadsheetId) this.id = spreadsheetId
+    if (tabName) this.tab = tabName
 
     if (!this.id) throw new Error('SpreadsheetId is required.')
 

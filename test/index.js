@@ -62,3 +62,20 @@ test('parse method should return array even spreadsheetId is invalid', async (t)
 
   t.end()
 })
+
+test('should get first tab by default if none is specified', async (t) => {
+  const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
+  const result = await parser.parse(spreadsheetId)
+  const expected = [{ a: 1, b: 2, c: 3 }, { a: 4, b: 5, c: 6 }, { a: 7, b: 8, c: 9 }]
+  t.deepEqual(result, expected)
+  t.end()
+})
+
+test('should get 2nd tab if specified', async (t) => {
+  const spreadsheetId = '1wdU-Cf7Kn5ZvhcvRePOoL10urdTA6TWGndBSKDAiYbQ'
+  const tabName = 'Sheet2'
+  const result = await parser.parse(spreadsheetId, tabName)
+  const expected = [{ a: 10, b: 20, c: 30 }, { a: 40, b: 50, c: 60 }, { a: 70, b: 80, c: 90 }]
+  t.deepEqual(result, expected)
+  t.end()
+})
