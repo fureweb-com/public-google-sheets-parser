@@ -4,8 +4,6 @@ const PublicGoogleSheetsParser = require('../src/index.js')
 const parser = new PublicGoogleSheetsParser()
 
 test('getSpreadsheetDataUsingFetch method should return expected result', async (t) => {
-  t.plan(2)
-
   const resultWithoutSpreadsheetId = await parser.getSpreadsheetDataUsingFetch()
   t.equal(resultWithoutSpreadsheetId, null)
 
@@ -20,8 +18,6 @@ test('getSpreadsheetDataUsingFetch method should return expected result', async 
 })
 
 test('filterUselessRows method should return expected array', (t) => {
-  t.plan(1)
-
   const givenRows = [{ v: null }, { v: undefined }, { v: 0 }, { v: false }, { d: 2 }, null]
 
   const result = parser.filterUselessRows(givenRows)
@@ -32,8 +28,6 @@ test('filterUselessRows method should return expected array', (t) => {
 })
 
 test('applyHeaderIntoRows method should return expected array', (t) => {
-  t.plan(1)
-
   const givenHeader = ['a', 'b', 'c']
   const givenRows = [
     { c: [{ v: 1, f: '1' }, { v: 2, f: '2' }, { v: 3, f: '3' }] },
@@ -49,8 +43,6 @@ test('applyHeaderIntoRows method should return expected array', (t) => {
 })
 
 test('parse method should return array even spreadsheetId is invalid', async (t) => {
-  t.plan(2)
-
   const invalidSpreadsheetId = 'id_that_does_not_exist_anywhere'
   const resultWithInvalidSpreadsheetId = await parser.parse(invalidSpreadsheetId)
   t.deepEqual(resultWithInvalidSpreadsheetId, [])
