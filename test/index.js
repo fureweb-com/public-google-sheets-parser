@@ -72,10 +72,25 @@ test('should get first sheet by default if none is specified', async (t) => {
 })
 
 test('should get 2nd sheet if specified', async (t) => {
-  const spreadsheetId = '1wdU-Cf7Kn5ZvhcvRePOoL10urdTA6TWGndBSKDAiYbQ'
+  const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
   const sheetName = 'Sheet2'
   const result = await parser.parse(spreadsheetId, sheetName)
   const expected = [{ a: 10, b: 20, c: 30 }, { a: 40, b: 50, c: 60 }, { a: 70, b: 80, c: 90 }]
   t.deepEqual(result, expected)
+  t.end()
+})
+
+test('should parse properly after change sheetName on runtime', async (t) => {
+  const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
+  const firstSheetName = 'Sheet1'
+  const secondSheetName = 'Sheet2'
+
+  const firstResult = await parser.parse(spreadsheetId, firstSheetName)
+  const firstExpected = [{ a: 1, b: 2, c: 3 }, { a: 4, b: 5, c: 6 }, { a: 7, b: 8, c: 9 }]
+  t.deepEqual(firstResult, firstExpected)
+
+  const secondResult = await parser.parse(spreadsheetId, secondSheetName)
+  const secondExpected = [{ a: 10, b: 20, c: 30 }, { a: 40, b: 50, c: 60 }, { a: 70, b: 80, c: 90 }]
+  t.deepEqual(secondResult, secondExpected)
   t.end()
 })
