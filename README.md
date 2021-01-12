@@ -12,7 +12,7 @@ It is a simple parser that helps you use public Google sheets document as if the
 
 The document to be used must be a Google Sheets document in the 'public' state and have a header in the first row. (e.g. [Google sheets for example](https://docs.google.com/spreadsheets/d/10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps/edit#gid=1839148703))
 
-There is a limitation that only the data of the first sheet can be imported, but it seems that it can be fully utilized for simple purposes, so I made it.
+**You can specify the sheet name to get a data. (Since v1.1.0)**
 
 It does not work in browsers where the [fetch API](https://caniuse.com/fetch) is not available.
 
