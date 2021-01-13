@@ -24,6 +24,18 @@ If you have a public spreadsheet document, and the first row is a header and you
 ### Demo page
 [Click here](http://fureweb.com/public-google-sheets-parser.html)
 
+### Installation
+
+With yarn:
+```bash
+$ yarn add public-google-sheets-parser
+```
+
+With npm:
+```bash
+$ npm i public-google-sheets-parser
+```
+
 ### Usage example
 - Node.js
 ```js
