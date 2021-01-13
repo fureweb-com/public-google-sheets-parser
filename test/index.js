@@ -86,3 +86,51 @@ test('should parse properly after change sheetName on runtime', async (t) => {
   t.deepEqual(secondResult, secondExpected)
   t.end()
 })
+
+test('should get public holiday information in a spreadsheet using a specific year as the sheet name', async (t) => {
+  const spreadsheetId = '1K5oodBEghRG66WCPBumRTcexp70bZprfaXovqvoxNac'
+  parser.id = spreadsheetId
+  parser.sheetName = '2021'
+  const resultOf2021 = await parser.parse()
+  const expectedOf2021 = [
+    { no: 1, date: '2021-01-01', name: '신정' },
+    { no: 2, date: '2021-02-11', name: '구정' },
+    { no: 3, date: '2021-02-12', name: '구정' },
+    { no: 4, date: '2021-02-13', name: '구정' },
+    { no: 5, date: '2021-03-01', name: '삼일절' },
+    { no: 6, date: '2021-05-05', name: '어린이날' },
+    { no: 7, date: '2021-05-19', name: '부처님오신날' },
+    { no: 8, date: '2021-06-06', name: '현충일' },
+    { no: 9, date: '2021-08-15', name: '광복절' },
+    { no: 10, date: '2021-09-20', name: '추석' },
+    { no: 11, date: '2021-09-21', name: '추석' },
+    { no: 12, date: '2021-09-22', name: '추석' },
+    { no: 13, date: '2021-10-03', name: '개천절' },
+    { no: 14, date: '2021-10-09', name: '한글날' },
+    { no: 15, date: '2021-12-25', name: '크리스마스' }
+  ]
+  t.deepEqual(resultOf2021, expectedOf2021)
+
+  // change sheetName
+  parser.sheetName = '2022'
+  const resultOf2022 = await parser.parse()
+  const expectedOf2022 = [
+    { no: 1, date: '2022-01-01', name: '신정' },
+    { no: 2, date: '2022-02-01', name: '구정' },
+    { no: 3, date: '2022-02-02', name: '구정' },
+    { no: 4, date: '2022-02-03', name: '구정' },
+    { no: 5, date: '2022-03-01', name: '삼일절' },
+    { no: 6, date: '2022-05-05', name: '어린이날' },
+    { no: 7, date: '2022-05-08', name: '부처님오신날' },
+    { no: 8, date: '2022-06-06', name: '현충일' },
+    { no: 9, date: '2022-08-15', name: '광복절' },
+    { no: 10, date: '2022-09-09', name: '추석' },
+    { no: 11, date: '2022-09-10', name: '추석' },
+    { no: 12, date: '2022-09-11', name: '추석' },
+    { no: 13, date: '2022-10-03', name: '개천절' },
+    { no: 14, date: '2022-10-09', name: '한글날' },
+    { no: 15, date: '2022-12-25', name: '크리스마스' }
+  ]
+  t.deepEqual(resultOf2022, expectedOf2022)
+  t.end()
+})
