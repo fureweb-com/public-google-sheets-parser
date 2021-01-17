@@ -134,3 +134,23 @@ test('should get public holiday information in a spreadsheet using a specific ye
   t.deepEqual(resultOf2022, expectedOf2022)
   t.end()
 })
+
+test('should throw when parse before set spreadsheetId', async (t) => {
+  const localParser = new PublicGoogleSheetsParser()
+
+  const actualError = await localParser.parse().catch((e) => e)
+  const expectedError = new Error('SpreadsheetId is required.')
+
+  t.deepEqual(actualError, expectedError)
+})
+
+test('should return expected array if document has no labels in cols', async (t) => {
+  parser.id = '15czdGBtjjA82zpp6Xh4CY9OWs4hUpO4ul7mk6VNPGEg'
+  const actualArray = await parser.parse()
+  const expectedArray = [
+    { field1: 'a1', field2: 'a2', field3: 'a3' },
+    { field1: 'b1', field2: 'b2', field3: 'b3' }
+  ]
+
+  t.deepEqual(actualArray, expectedArray)
+})

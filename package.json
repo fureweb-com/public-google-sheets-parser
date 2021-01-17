@@ -6,7 +6,8 @@
     "build:dist": "npx babel ./src/index.js --out-file ./dist/index.js",
     "test": "node ./test",
     "lint": "eslint --format ./node_modules/eslint-friendly-formatter --ext .js .",
-    "lint:fix": "eslint --format ./node_modules/eslint-friendly-formatter --ext .js . --fix"
+    "lint:fix": "eslint --format ./node_modules/eslint-friendly-formatter --ext .js . --fix",
+    "coverage": "rimraf coverage && istanbul cover tape ./test/index.js"
   },
   "main": "src/index.js",
   "unpkg": "dist/index.js",
@@ -40,7 +41,8 @@
     "node_modules",
     "package",
     "example",
-    "dist"
+    "dist",
+    "coverage"
   ],
   "devDependencies": {
     "@babel/cli": "^7.12.8",
@@ -50,6 +52,8 @@
     "eslint": "^7.14.0",
     "eslint-friendly-formatter": "^4.0.1",
     "husky": "^4.3.0",
+    "istanbul": "^1.1.0-alpha.1",
+    "rimraf": "^3.0.2",
     "standard": "^16.0.3",
     "tape": "^5.0.1"
   }
