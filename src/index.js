@@ -1,5 +1,5 @@
 const isBrowser = typeof require === 'undefined'
-const fetch = isBrowser ? window.fetch : require('node-fetch')
+const fetch = isBrowser ? /* istanbul ignore next */ window.fetch : require('node-fetch')
 
 class PublicGoogleSheetsParser {
   constructor (spreadsheetId, sheetName) {
@@ -22,7 +22,7 @@ class PublicGoogleSheetsParser {
 
     return fetch(url)
       .then((r) => r.ok ? r.text() : null)
-      .catch((_) => null)
+      .catch(/* istanbul ignore next */(_) => null)
   }
 
   filterUselessRows (rows) {
@@ -70,6 +70,7 @@ class PublicGoogleSheetsParser {
   }
 }
 
+/* istanbul ignore next */
 if (isBrowser) {
   window.PublicGoogleSheetsParser = PublicGoogleSheetsParser
 } else {
