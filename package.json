@@ -34,7 +34,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint && npm test"
+      "pre-commit": "yarn lint && yarn test"
     }
   },
   "eslintIgnore": [
@@ -50,7 +50,10 @@
     "@babel/plugin-transform-async-to-generator": "^7.12.1",
     "@babel/plugin-transform-classes": "^7.12.1",
     "eslint": "^7.14.0",
+    "eslint-config-standard": "^16.0.2",
     "eslint-friendly-formatter": "^4.0.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
     "husky": "^4.3.0",
     "istanbul": "^1.1.0-alpha.1",
     "rimraf": "^3.0.2",
