@@ -29,9 +29,7 @@
     "url": "https://github.com/fureweb-com/public-google-sheets-parser.git"
   },
   "homepage": "https://github.com/fureweb-com/public-google-sheets-parser.git",
-  "dependencies": {
-    "node-fetch": "^2.6.1"
-  },
+  "dependencies": {},
   "husky": {
     "hooks": {
       "pre-commit": "yarn lint && yarn test"
