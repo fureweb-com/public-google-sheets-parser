@@ -8,7 +8,7 @@
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ffureweb-com%2Fpublic-google-sheets-parser)](https://hits.seeyoufarm.com)
 [![GitHub stars](https://img.shields.io/github/stars/fureweb-com/public-google-sheets-parser)](https://github.com/fureweb-com/public-google-sheets-parser/stargazers)
-[![downloads](https://img.shields.io/npm/dm/public-google-sheets-parser)](https://www.npmjs.com/package/nuxt)
+[![downloads](https://img.shields.io/npm/dm/public-google-sheets-parser)](https://www.npmjs.com/package/public-google-sheets-parser)
 
 ![Introduction](introduction.png)
 
