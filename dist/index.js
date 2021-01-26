@@ -11,7 +11,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 const isBrowser = typeof require === 'undefined';
 const fetch = isBrowser ?
 /* istanbul ignore next */
-window.fetch : require('node-fetch');
+window.fetch : require('./fetch');
 
 let PublicGoogleSheetsParser = /*#__PURE__*/function () {
   function PublicGoogleSheetsParser(spreadsheetId, sheetName) {
@@ -36,7 +36,7 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
         url = url.concat(`sheet=${this.sheetName}`);
       }
 
-      return fetch(url).then(r => r.ok ? r.text() : null).catch(
+      return fetch(url).then(r => r && r.ok && r.text ? r.text() : null).catch(
       /* istanbul ignore next */
       _ => null);
     }

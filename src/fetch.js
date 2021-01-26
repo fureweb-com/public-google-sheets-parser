@@ -1,5 +1,4 @@
 const https = require('https')
-const isBrowser = typeof require === 'undefined'
 
 const nodeFetch = async (url) => {
   return new Promise((resolve, reject) => {
@@ -17,7 +16,5 @@ const nodeFetch = async (url) => {
   })
 }
 
-const fetch = isBrowser ? /* istanbul ignore next */ window.fetch : nodeFetch
-
-module.exports = fetch
-module.exports.default = fetch
+module.exports = nodeFetch
+module.exports.default = nodeFetch

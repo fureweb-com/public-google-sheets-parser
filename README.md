@@ -107,13 +107,16 @@ export default {
 
 - browser
 ```html
-<script src="https://cdn.jsdelivr.net/npm/public-google-sheets-parser@1.0.21/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/public-google-sheets-parser@latest"></script>
 
 <script>
 const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
 const parser = new PublicGoogleSheetsParser()
 parser.parse(spreadsheetId).then((items) => {
-  // items should be [{"a":1,"b":2,"c":3},{"a":4,"b":5,"c":6},{"a":7,"b":8,"c":9}]
+  // items should be [{ a: 1, b: 2, c: 3 },{ a: 4, b: 5, c: 6 },{ a: 7, b: 8, c: 9 }]
+})
+parser.parse(spreadsheetId, 'Sheet2').then((items) => {
+  // items should be [{ a: 10, b: 20, c: 30 }, { a: 40, b: 50, c: 60 }, { a: 70, b: 80, c: 90 }]
 })
 </script>
 ```

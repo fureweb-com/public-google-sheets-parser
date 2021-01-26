@@ -1,5 +1,5 @@
 const isBrowser = typeof require === 'undefined'
-const fetch = require('./fetch')
+const fetch = isBrowser ? /* istanbul ignore next */window.fetch : require('./fetch')
 
 class PublicGoogleSheetsParser {
   constructor (spreadsheetId, sheetName) {
