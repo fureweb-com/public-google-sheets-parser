@@ -18,7 +18,8 @@
   },
   "keywords": [
     "google sheets",
-    "spreadsheet"
+    "spreadsheet",
+    "zero-dependency"
   ],
   "author": {
     "name": "fureweb",

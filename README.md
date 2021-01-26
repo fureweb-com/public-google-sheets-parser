@@ -1,4 +1,4 @@
-# Public Google sheets parser
+# Public Google Sheets Parser
 
 [![Author](https://img.shields.io/badge/Author-fureweb-blue)](https://github.com/fureweb-com)
 [![npm package](https://img.shields.io/npm/v/public-google-sheets-parser.svg?cacheSeconds=3600&style=flat-square)](https://www.npmjs.com/package/public-google-sheets-parser)
@@ -9,7 +9,8 @@
 
 ![Introduction](introduction.png)
 
-It is a simple parser that helps you use public Google sheets document as if they were a database.
+It is a simple and **zero dependency** parser that helps you use public Google sheets document as if they were a database.
+
 
 The document to be used must be a Google Sheets document in the 'public' state and have a header in the first row. (e.g. [Google sheets for example](https://docs.google.com/spreadsheets/d/10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps/edit#gid=1839148703))
 
