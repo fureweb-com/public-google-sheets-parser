@@ -73,12 +73,13 @@ parser.parse(spreadsheetId).then((items) => {
 })
 
 
-// 4. You can also pass  the name of specific sheet if you want to get that instead of the first one.
+// 4. You can also pass the name of specific sheet to get.
 parser.parse(spreadsheetId, 'Sheet2').then((items) => {
-  // items should be from the second sheet!
+  // items should be [{"a":10,"b":20,"c":30},{"a":40,"b":50,"c":60},{"a":70,"b":80,"c":90}]
 })
 ```
-You can use any of the three methods you want!
+
+You can use any of the 4 methods you want!
 
 - with import (Vue.js or whatever)
 ```js
