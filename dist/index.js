@@ -11,7 +11,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 const isBrowser = typeof require === 'undefined';
 const fetch = isBrowser ?
 /* istanbul ignore next */
-window.fetch : require('./fetch');
+window.fetch : require('../src/fetch');
 
 let PublicGoogleSheetsParser = /*#__PURE__*/function () {
   function PublicGoogleSheetsParser(spreadsheetId, sheetName) {
