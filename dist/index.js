@@ -40,18 +40,18 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
       _ => null);
     }
   }, {
-    key: "filterUselessRows",
-    value: function filterUselessRows(rows) {
-      return rows.filter(row => row && row.v !== null && row.v !== undefined);
+    key: "normalizeRow",
+    value: function normalizeRow(rows) {
+      return rows.map(row => row && row.v !== null && row.v !== undefined ? row : {});
     }
   }, {
     key: "applyHeaderIntoRows",
     value: function applyHeaderIntoRows(header, rows) {
       return rows.map(({
         c: row
-      }) => this.filterUselessRows(row)).map(row => row.reduce((p, c, i) => Object.assign(p, {
+      }) => this.normalizeRow(row)).map(row => row.reduce((p, c, i) => c.v ? Object.assign(p, {
         [header[i]]: c.v
-      }), {}));
+      }) : p, {}));
     }
   }, {
     key: "getItems",
@@ -71,7 +71,7 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
           rows = this.applyHeaderIntoRows(header, parsedJSON.table.rows);
         } else {
           const [headerRow, ...originalRows] = parsedJSON.table.rows;
-          const header = this.filterUselessRows(headerRow.c).map(row => row.v);
+          const header = this.normalizeRow(headerRow.c).map(row => row.v);
           rows = this.applyHeaderIntoRows(header, originalRows);
         }
       } catch (e) {}
