@@ -21,11 +21,11 @@ class Test {
       t.end()
     })
 
-    test('filterUselessRows method should return expected array', (t) => {
+    test('normalizeRow method should return expected array', (t) => {
       const givenRows = [{ v: null }, { v: undefined }, { v: 0 }, { v: false }, { d: 2 }, null]
 
-      const result = this.parser.filterUselessRows(givenRows)
-      const expected = [{ v: 0 }, { v: false }]
+      const result = this.parser.normalizeRow(givenRows)
+      const expected = [{}, {}, { v: 0 }, { v: false }, {}, {}]
       t.deepEqual(result, expected)
 
       t.end()
@@ -154,6 +154,18 @@ class Test {
       const expectedArray = [
         { field1: 'a1', field2: 'a2', field3: 'a3' },
         { field1: 'b1', field2: 'b2', field3: 'b3' }
+      ]
+
+      t.deepEqual(actualArray, expectedArray)
+    })
+
+    test('should return expected array even if there are empty cell', async (t) => {
+      this.parser.id = '1hAT59kWFcDSNs9X0puWbylioEIhVnzUtHz6YhYQZ5cw'
+      const actualArray = await this.parser.parse()
+      const expectedArray = [
+        { a: 1, b: 2, c: 3 },
+        { a: 4, c: 6 },
+        { b: 8, c: 9 }
       ]
 
       t.deepEqual(actualArray, expectedArray)
