@@ -67,7 +67,7 @@ class Test {
       t.end()
     })
 
-    test('should get 2nd sheet if specified', async (t) => {
+    test('should get 2nd sheet if name is specified', async (t) => {
       const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
       const sheetName = 'Sheet2'
       const result = await this.parser.parse(spreadsheetId, sheetName)
@@ -136,6 +136,41 @@ class Test {
         { no: 15, date: '2022-12-25', name: '크리스마스' }
       ]
       t.deepEqual(resultOf2022, expectedOf2022)
+      t.end()
+    })
+
+    test('should get 2nd sheet if sheet ID specified', async (t) => {
+      const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
+      const sheetInfo = { sheetId: '934929616' }
+      const result = await this.parser.parse(spreadsheetId, sheetInfo)
+      const expected = [{ a: 10, b: 20, c: 30 }, { a: 40, b: 50, c: 60 }, { a: 70, b: 80, c: 90 }]
+      t.deepEqual(result, expected)
+      t.end()
+    })
+
+    test('should parse properly after changing sheetId at runtime', async (t) => {
+      const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
+      const firstSheetId = '0'
+      const secondSheetId = '934929616'
+
+      const firstResult = await this.parser.parse(spreadsheetId, { sheetId: firstSheetId })
+      const firstExpected = [{ a: 1, b: 2, c: 3 }, { a: 4, b: 5, c: 6 }, { a: 7, b: 8, c: 9 }]
+      t.deepEqual(firstResult, firstExpected)
+
+      const secondResult = await this.parser.parse(spreadsheetId, { sheetId: secondSheetId })
+      const secondExpected = [{ a: 10, b: 20, c: 30 }, { a: 40, b: 50, c: 60 }, { a: 70, b: 80, c: 90 }]
+      t.deepEqual(secondResult, secondExpected)
+      t.end()
+    })
+
+    test('should parse properly if both sheetName and sheetId are given', async (t) => {
+      const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
+      const sheetName = '2022'
+      const sheetId = '934929616'
+
+      const result = await this.parser.parse(spreadsheetId, { sheetId: sheetId, sheetName: sheetName })
+      const expected = [{ a: 10, b: 20, c: 30 }, { a: 40, b: 50, c: 60 }, { a: 70, b: 80, c: 90 }]
+      t.deepEqual(result, expected)
       t.end()
     })
 
