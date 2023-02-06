@@ -2,9 +2,28 @@ const isBrowser = typeof require === 'undefined'
 const fetch = isBrowser ? /* istanbul ignore next */window.fetch : require('../src/fetch')
 
 class PublicGoogleSheetsParser {
-  constructor (spreadsheetId, sheetName) {
+  constructor (spreadsheetId, sheetInfo) {
     this.id = spreadsheetId
-    this.sheetName = sheetName
+    this.parseSheetInfo(sheetInfo);
+  }
+
+  /**
+   * Parses the given object or string into sheetName and/or sheetId.
+   * If a string is given, sheetName is set.
+   * If an object is given, its sheetId and sheetName properties are set.
+    * @param sheetInfo
+   */
+  parseSheetInfo (sheetInfo) {
+    if (sheetInfo) {
+      if (typeof sheetInfo === 'string') {
+        this.sheetName = sheetInfo;
+      }
+      else if (typeof sheetInfo === 'object') {
+        this.sheetName = sheetInfo.sheetName;
+        this.sheetId = sheetInfo.sheetId;
+      }
+    }
+
   }
 
   getSpreadsheetDataUsingFetch () {
@@ -14,7 +33,10 @@ class PublicGoogleSheetsParser {
     // spreadsheet document for example: https://docs.google.com/spreadsheets/d/10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps/edit#gid=1719755213
     if (!this.id) return null
     let url = `https://docs.google.com/spreadsheets/d/${this.id}/gviz/tq?`
-    if (this.sheetName) {
+    if (this.sheetId) {
+      url = url.concat(`gid=${this.sheetId}`)
+    }
+    else if (this.sheetName) {
       url = url.concat(`sheet=${this.sheetName}`)
     }
 
@@ -54,9 +76,9 @@ class PublicGoogleSheetsParser {
     return rows
   }
 
-  async parse (spreadsheetId, sheetName) {
+  async parse (spreadsheetId, sheetInfo) {
     if (spreadsheetId) this.id = spreadsheetId
-    if (sheetName) this.sheetName = sheetName
+    if (sheetInfo) this.parseSheetInfo(sheetInfo);
 
     if (!this.id) throw new Error('SpreadsheetId is required.')
 
