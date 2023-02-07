@@ -4,7 +4,7 @@ const fetch = isBrowser ? /* istanbul ignore next */window.fetch : require('../s
 class PublicGoogleSheetsParser {
   constructor (spreadsheetId, sheetInfo) {
     this.id = spreadsheetId
-    this.parseSheetInfo(sheetInfo);
+    this.parseSheetInfo(sheetInfo)
   }
 
   /**
@@ -16,15 +16,13 @@ class PublicGoogleSheetsParser {
   parseSheetInfo (sheetInfo) {
     if (sheetInfo) {
       if (typeof sheetInfo === 'string') {
-        this.sheetName = sheetInfo;
-        this.sheetId = null;
-      }
-      else if (typeof sheetInfo === 'object') {
-        this.sheetName = sheetInfo.sheetName;
-        this.sheetId = sheetInfo.sheetId;
+        this.sheetName = sheetInfo
+        this.sheetId = null
+      } else if (typeof sheetInfo === 'object') {
+        this.sheetName = sheetInfo.sheetName
+        this.sheetId = sheetInfo.sheetId
       }
     }
-
   }
 
   getSpreadsheetDataUsingFetch () {
@@ -36,8 +34,7 @@ class PublicGoogleSheetsParser {
     let url = `https://docs.google.com/spreadsheets/d/${this.id}/gviz/tq?`
     if (this.sheetId) {
       url = url.concat(`gid=${this.sheetId}`)
-    }
-    else if (this.sheetName) {
+    } else if (this.sheetName) {
       url = url.concat(`sheet=${this.sheetName}`)
     }
 
@@ -79,7 +76,7 @@ class PublicGoogleSheetsParser {
 
   async parse (spreadsheetId, sheetInfo) {
     if (spreadsheetId) this.id = spreadsheetId
-    if (sheetInfo) this.parseSheetInfo(sheetInfo);
+    if (sheetInfo) this.parseSheetInfo(sheetInfo)
 
     if (!this.id) throw new Error('SpreadsheetId is required.')
 
