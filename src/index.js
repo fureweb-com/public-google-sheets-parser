@@ -17,6 +17,7 @@ class PublicGoogleSheetsParser {
     if (sheetInfo) {
       if (typeof sheetInfo === 'string') {
         this.sheetName = sheetInfo;
+        this.sheetId = null;
       }
       else if (typeof sheetInfo === 'object') {
         this.sheetName = sheetInfo.sheetName;

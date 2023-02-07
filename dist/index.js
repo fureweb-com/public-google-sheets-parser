@@ -20,6 +20,13 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
     this.id = spreadsheetId;
     this.parseSheetInfo(sheetInfo);
   }
+  /**
+   * Parses the given object or string into sheetName and/or sheetId.
+   * If a string is given, sheetName is set.
+   * If an object is given, its sheetId and sheetName properties are set.
+    * @param sheetInfo
+   */
+
 
   _createClass(PublicGoogleSheetsParser, [{
     key: "parseSheetInfo",
@@ -27,6 +34,7 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
       if (sheetInfo) {
         if (typeof sheetInfo === 'string') {
           this.sheetName = sheetInfo;
+          this.sheetId = null;
         } else if (typeof sheetInfo === 'object') {
           this.sheetName = sheetInfo.sheetName;
           this.sheetId = sheetInfo.sheetId;
