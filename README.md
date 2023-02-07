@@ -79,12 +79,12 @@ parser.parse(spreadsheetId, 'Sheet2').then((items) => {
   // items should be [{"a":10,"b":20,"c":30},{"a":40,"b":50,"c":60},{"a":70,"b":80,"c":90}]
 })
 // ...or as an object (since v1.3.0) that specifies the sheet's name or ID. If both are provided, sheet ID is used:
-parser.parse(spreadsheetId, { sheetId: '123456789' }).then((items) => {
+parser.parse(spreadsheetId, { sheetId: '784337977' }).then((items) => {
   // items should be [{"a":10,"b":20,"c":30},{"a":40,"b":50,"c":60},{"a":70,"b":80,"c":90}]
 })
 
 // Sheet name or sheet ID can also be passed during instantiation:
-const parser = new PublicGoogleSheetsParser(spreadsheetId, { sheetId: '123456789'})
+const parser = new PublicGoogleSheetsParser(spreadsheetId, { sheetId: '784337977'})
 parser.parse().then((items) => {
   // items should be [{"a":1,"b":2,"c":3},{"a":4,"b":5,"c":6},{"a":7,"b":8,"c":9}]
 })
