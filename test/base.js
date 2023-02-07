@@ -168,7 +168,7 @@ class Test {
       const sheetName = 'Sheet2'
       const sheetId = '784337977'
 
-      const result = await this.parser.parse(spreadsheetId, { sheetId: sheetId, sheetName: sheetName })
+      const result = await this.parser.parse(spreadsheetId, { sheetId, sheetName })
       const expected = [{ a: 10, b: 20, c: 30 }, { a: 40, b: 50, c: 60 }, { a: 70, b: 80, c: 90 }]
       t.deepEqual(result, expected)
       t.end()
@@ -196,8 +196,8 @@ class Test {
 
     test('should return expected array even if there are empty cell', async (t) => {
       this.parser.id = '1hAT59kWFcDSNs9X0puWbylioEIhVnzUtHz6YhYQZ5cw'
-      this.parser.sheetName = null;
-      this.parser.sheetId = null;
+      this.parser.sheetName = null
+      this.parser.sheetId = null
       const actualArray = await this.parser.parse()
       const expectedArray = [
         { a: 1, b: 2, c: 3 },
