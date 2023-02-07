@@ -141,7 +141,7 @@ class Test {
 
     test('should get 2nd sheet if sheet ID specified', async (t) => {
       const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
-      const sheetInfo = { sheetId: '934929616' }
+      const sheetInfo = { sheetId: '784337977' }
       const result = await this.parser.parse(spreadsheetId, sheetInfo)
       const expected = [{ a: 10, b: 20, c: 30 }, { a: 40, b: 50, c: 60 }, { a: 70, b: 80, c: 90 }]
       t.deepEqual(result, expected)
@@ -151,7 +151,7 @@ class Test {
     test('should parse properly after changing sheetId at runtime', async (t) => {
       const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
       const firstSheetId = '0'
-      const secondSheetId = '934929616'
+      const secondSheetId = '784337977'
 
       const firstResult = await this.parser.parse(spreadsheetId, { sheetId: firstSheetId })
       const firstExpected = [{ a: 1, b: 2, c: 3 }, { a: 4, b: 5, c: 6 }, { a: 7, b: 8, c: 9 }]
@@ -165,8 +165,8 @@ class Test {
 
     test('should parse properly if both sheetName and sheetId are given', async (t) => {
       const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
-      const sheetName = '2022'
-      const sheetId = '934929616'
+      const sheetName = 'Sheet2'
+      const sheetId = '784337977'
 
       const result = await this.parser.parse(spreadsheetId, { sheetId: sheetId, sheetName: sheetName })
       const expected = [{ a: 10, b: 20, c: 30 }, { a: 40, b: 50, c: 60 }, { a: 70, b: 80, c: 90 }]
@@ -196,6 +196,8 @@ class Test {
 
     test('should return expected array even if there are empty cell', async (t) => {
       this.parser.id = '1hAT59kWFcDSNs9X0puWbylioEIhVnzUtHz6YhYQZ5cw'
+      this.parser.sheetName = null;
+      this.parser.sheetId = null;
       const actualArray = await this.parser.parse()
       const expectedArray = [
         { a: 1, b: 2, c: 3 },
