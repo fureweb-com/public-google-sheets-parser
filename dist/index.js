@@ -14,14 +14,26 @@ const fetch = isBrowser ?
 window.fetch : require('../src/fetch');
 
 let PublicGoogleSheetsParser = /*#__PURE__*/function () {
-  function PublicGoogleSheetsParser(spreadsheetId, sheetName) {
+  function PublicGoogleSheetsParser(spreadsheetId, sheetInfo) {
     _classCallCheck(this, PublicGoogleSheetsParser);
 
     this.id = spreadsheetId;
-    this.sheetName = sheetName;
+    this.parseSheetInfo(sheetInfo);
   }
 
   _createClass(PublicGoogleSheetsParser, [{
+    key: "parseSheetInfo",
+    value: function parseSheetInfo(sheetInfo) {
+      if (sheetInfo) {
+        if (typeof sheetInfo === 'string') {
+          this.sheetName = sheetInfo;
+        } else if (typeof sheetInfo === 'object') {
+          this.sheetName = sheetInfo.sheetName;
+          this.sheetId = sheetInfo.sheetId;
+        }
+      }
+    }
+  }, {
     key: "getSpreadsheetDataUsingFetch",
     value: function getSpreadsheetDataUsingFetch() {
       // Read data from the first sheet of the target document.
@@ -31,7 +43,9 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
       if (!this.id) return null;
       let url = `https://docs.google.com/spreadsheets/d/${this.id}/gviz/tq?`;
 
-      if (this.sheetName) {
+      if (this.sheetId) {
+        url = url.concat(`gid=${this.sheetId}`);
+      } else if (this.sheetName) {
         url = url.concat(`sheet=${this.sheetName}`);
       }
 
@@ -81,9 +95,9 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
   }, {
     key: "parse",
     value: function () {
-      var _parse = _asyncToGenerator(function* (spreadsheetId, sheetName) {
+      var _parse = _asyncToGenerator(function* (spreadsheetId, sheetInfo) {
         if (spreadsheetId) this.id = spreadsheetId;
-        if (sheetName) this.sheetName = sheetName;
+        if (sheetInfo) this.parseSheetInfo(sheetInfo);
         if (!this.id) throw new Error('SpreadsheetId is required.');
         const spreadsheetResponse = yield this.getSpreadsheetDataUsingFetch();
         if (spreadsheetResponse === null) return [];
