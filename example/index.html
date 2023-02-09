@@ -7,8 +7,10 @@
 </head>
 <body>
   <div class="for-input">
-    <input id="sheet-id" type="text" style="width: 300px" placeholder="insert your spreadsheet ID here">
-    <button class="get-items">GET ITEMS</button>
+    <input id="sheet-id" type="text" style="width: 300px" placeholder="insert your spreadsheet ID here" value="10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps">
+    <button class="get-items">GET ITEMS</button><br/>
+    <input id="gid" type="text" style="width: 300px" placeholder="insert you GID if you need (optional)"><br/>
+    <input id="sheet-name" type="text" style="width: 300px" placeholder="insert you sheetName if you need (optional)">
   </div>
 
   <div>
@@ -17,8 +19,7 @@
   </div>
 
   <div class="result" style="padding: 16px; border: 1px solid #dedede; background-color: #eee"></div>
-  <script src="../src/index.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/public-google-sheets-parser?v=20230209"></script>
   <script>
     (() => {
       const showResult = (string) => {
@@ -31,8 +32,11 @@
           window.alert('Please insert your public spreadsheet ID')
           return spreadsheetIdElement.focus()
         }
-
-        const parser = new PublicGoogleSheetsParser(spreadsheetIdElement.value.trim())
+        const spreadsheetId = spreadsheetIdElement.value.trim()
+        const sheetId = document.querySelector('#gid').value.trim()
+        const sheetName = document.querySelector('#sheet-name').value.trim()
+        const sheetInfo = { sheetId, sheetName }
+        const parser = new PublicGoogleSheetsParser(spreadsheetId, sheetInfo)
         parser.parse().then((items) => {
           // items should be [{ a :1, b :2, c :3 },{ a :4, b :5, c :6 },{ a :7, b :8, c :9 }]
           showResult(items)
