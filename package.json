@@ -39,7 +39,6 @@
   "eslintIgnore": [
     "node_modules",
     "package",
-    "example",
     "dist",
     "coverage"
   ],
