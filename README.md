@@ -13,13 +13,16 @@
 
 ![Introduction](introduction.png)
 
+### Demo page
+[https://fureweb-com.github.io/public-google-sheets-parser/](https://fureweb-com.github.io/public-google-sheets-parser/)
+
+
 It is a simple and **zero dependency** parser that helps you use public Google sheets document as if they were a database.
 
 
-The document to be used must be a Google Sheets document in the 'public' state and have a header in the first row. (e.g. [Google sheets for example](https://docs.google.com/spreadsheets/d/10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps/edit#gid=1839148703))
+The document that you intend to use must be a Google Sheet that is set to "public" and must contain a header in the first row. For instance, [you can use a Google Sheet like the one in the example provided](https://docs.google.com/spreadsheets/d/10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps/edit#gid=1839148703).
 
-**You can optionally specify the sheet's tab name to get data from that specific sheet. (Since v1.1.0)**
-**You can optionally specify the sheet's GID to get data from that specific sheet. (Since v1.3.0)**
+You have the option to specify the name of the sheet's tab to retrieve data from a specific sheet. **This feature has been available since version 1.1.0.** Additionally, you can also specify the sheet's GID to obtain data from a specific sheet. **This feature has been added since version 1.3.0.**
 
 It does not work in browsers where the [fetch API](https://caniuse.com/fetch) is not available.
 
@@ -28,8 +31,6 @@ It does not work in browsers where the [fetch API](https://caniuse.com/fetch) is
 You can also use it via free API. Please see [this documentation](https://api.fureweb.com).
 If you have a public spreadsheet document, and the first row is a header and you have more than one row of data, you can call it free of charge through this API and use the result as a JSON response.
 
-### Demo page
-[Click here](http://fureweb.com/public-google-sheets-parser.html)
 
 ### Installation
 
