@@ -10,7 +10,6 @@
 [![GitHub stars](https://img.shields.io/github/stars/fureweb-com/public-google-sheets-parser)](https://github.com/fureweb-com/public-google-sheets-parser/stargazers)
 [![downloads](https://img.shields.io/npm/dm/public-google-sheets-parser)](https://www.npmjs.com/package/public-google-sheets-parser)
 [![JSDelivr CDN](https://data.jsdelivr.com/v1/package/npm/public-google-sheets-parser/badge)](https://www.jsdelivr.com/package/npm/public-google-sheets-parser)
-[![Rate this package](https://badges.openbase.com/js/rating/public-google-sheets-parser.svg?token=8Q7RvE42Q3cmVmePqRrzNfLRwEkvW1V+ATDKKAYEv58=)](https://openbase.com/js/public-google-sheets-parser?utm_source=embedded&amp;utm_medium=badge&amp;utm_campaign=rate-badge)
 
 ![Introduction](introduction.png)
 
