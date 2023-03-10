@@ -1,13 +1,15 @@
 type SheetName = string
+type GID = string
+
 type SheetInfo = SheetName | {
   sheetName?: SheetName
-  sheetId?: number
+  sheetId?: GID
 }
 
 declare class PublicGoogleSheetsParser {
   private id?: string
-  private sheetId?: string
-  private sheetName?: string
+  private sheetName?: SheetName
+  private sheetId?: GID
 
   constructor(spreadsheetId?: string, sheetInfo?: SheetInfo)
 
