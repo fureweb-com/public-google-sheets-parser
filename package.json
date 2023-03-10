@@ -57,5 +57,6 @@
     "rimraf": "^3.0.2",
     "standard": "^16.0.3",
     "tape": "^5.0.1"
-  }
+  },
+  "types": "@types/index.d.ts"
 }
