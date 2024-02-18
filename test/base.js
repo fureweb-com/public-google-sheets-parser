@@ -207,6 +207,19 @@ class Test {
 
       t.deepEqual(actualArray, expectedArray)
     })
+
+    test('should return false value when explicitly exist in cell', (t) => {
+      const givenHeader = ['a', 'b', 'c']
+      const givenRows = [
+        { c: [{ v: 1, f: '1' }, { v: 'FALSE', f: 'FALSE' }, { v: false, f: 'false' }] },
+      ]
+
+      const result = this.parser.applyHeaderIntoRows(givenHeader, givenRows)
+      const expected = [{ a: 1, b: 'FALSE', c: false }]
+      t.deepEqual(result, expected)
+
+      t.end()
+    })
   }
 }
 
