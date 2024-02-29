@@ -1,6 +1,5 @@
 const isBrowser = typeof require === 'undefined'
 const fetch = isBrowser ? /* istanbul ignore next */window.fetch : require('../src/fetch')
-
 class PublicGoogleSheetsParser {
   constructor (spreadsheetId, sheetInfo) {
     this.id = spreadsheetId
@@ -23,6 +22,10 @@ class PublicGoogleSheetsParser {
         this.sheetId = sheetInfo.sheetId
       }
     }
+  }
+
+  isDate (date) {
+    return date && typeof date === 'string' && /Date\((\d+),(\d+),(\d+)\)/.test(date)
   }
 
   getSpreadsheetDataUsingFetch () {
@@ -50,7 +53,7 @@ class PublicGoogleSheetsParser {
   applyHeaderIntoRows (header, rows) {
     return rows
       .map(({ c: row }) => this.normalizeRow(row))
-      .map((row) => row.reduce((p, c, i) => (c.v !== null && c.v !== undefined) ? Object.assign(p, { [header[i]]: c.v }) : p, {}))
+      .map((row) => row.reduce((p, c, i) => (c.v !== null && c.v !== undefined) ? Object.assign(p, { [header[i]]: this.isDate(c.v) ? c.f ?? c.v : c.v }) : p, {}))
   }
 
   getItems (spreadsheetResponse) {
