@@ -220,6 +220,18 @@ class Test {
 
       t.end()
     })
+
+    test('should return date string when date exists in cell', (t) => {
+      const givenHeader = ['a', 'b', 'c']
+      const givenRows = [
+        { c: [{ v: 1, f: '1' }, { v: 'Date(2024,0,1)', f: '2024-01-01' }, { v: 'Date(2024,11,1)', f: '2024-12-01' }] },
+      ]
+
+      const result = this.parser.applyHeaderIntoRows(givenHeader, givenRows)
+      const expected = [{ a: 1, b: '2024-01-01', c: '2024-12-01' }]
+      t.deepEqual(result, expected)
+      t.end()
+    })
   }
 }
 
