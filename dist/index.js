@@ -42,6 +42,11 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
       }
     }
   }, {
+    key: "isDate",
+    value: function isDate(date) {
+      return date && typeof date === 'string' && /Date\((\d+),(\d+),(\d+)\)/.test(date);
+    }
+  }, {
     key: "getSpreadsheetDataUsingFetch",
     value: function getSpreadsheetDataUsingFetch() {
       // Read data from the first sheet of the target document.
@@ -72,7 +77,7 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
       return rows.map(({
         c: row
       }) => this.normalizeRow(row)).map(row => row.reduce((p, c, i) => c.v !== null && c.v !== undefined ? Object.assign(p, {
-        [header[i]]: c.v
+        [header[i]]: this.isDate(c.v) ? c.f ?? c.v : c.v
       }) : p, {}));
     }
   }, {
