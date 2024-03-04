@@ -120,6 +120,7 @@
 
       const getItems = () => {
         const spreadsheetIdElement = document.querySelector('#sheet-id')
+        const useFormattedDate = document.querySelector('#use-formatted-date').checked
         if (!spreadsheetIdElement.value) {
           window.alert('Please insert your public spreadsheet ID')
           return spreadsheetIdElement.focus()
@@ -127,7 +128,7 @@
         const spreadsheetId = spreadsheetIdElement.value.trim()
         const sheetId = document.querySelector('#gid').value.trim()
         const sheetName = document.querySelector('#sheet-name').value.trim()
-        const sheetInfo = { sheetId, sheetName }
+        const sheetInfo = { sheetId, sheetName, useFormattedDate }
         const parser = new PublicGoogleSheetsParser(spreadsheetId, sheetInfo)
         setLoading()
         parser.parse().then((items) => {
