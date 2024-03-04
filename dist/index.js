@@ -14,31 +14,30 @@ const fetch = isBrowser ?
 window.fetch : require('../src/fetch');
 
 let PublicGoogleSheetsParser = /*#__PURE__*/function () {
-  function PublicGoogleSheetsParser(spreadsheetId, sheetInfo) {
+  function PublicGoogleSheetsParser(spreadsheetId, option) {
     _classCallCheck(this, PublicGoogleSheetsParser);
 
     this.id = spreadsheetId;
-    this.parseSheetInfo(sheetInfo);
+    this.setOption(option);
   }
-  /**
-   * Parses the given object or string into sheetName and/or sheetId.
-   * If a string is given, sheetName is set.
-   * If an object is given, its sheetId and sheetName properties are set.
-    * @param sheetInfo
-   */
-
 
   _createClass(PublicGoogleSheetsParser, [{
-    key: "parseSheetInfo",
-    value: function parseSheetInfo(sheetInfo) {
-      if (sheetInfo) {
-        if (typeof sheetInfo === 'string') {
-          this.sheetName = sheetInfo;
-          this.sheetId = null;
-        } else if (typeof sheetInfo === 'object') {
-          this.sheetName = sheetInfo.sheetName;
-          this.sheetId = sheetInfo.sheetId;
-        }
+    key: "setOption",
+    value: function setOption(option) {
+      if (!option) {
+        this.sheetName = this.sheetName || null;
+        this.sheetId = this.sheetId || null;
+        this.useFormattedDate = this.useFormattedDate || false;
+        return;
+      }
+
+      if (typeof option === 'string') {
+        this.sheetName = option;
+        this.sheetId = this.sheetId || null;
+      } else if (typeof option === 'object') {
+        this.sheetName = option.sheetName || this.sheetName;
+        this.sheetId = option.sheetId || this.sheetId;
+        this.useFormattedDate = option.hasOwnProperty('useFormattedDate') ? option.useFormattedDate : this.useFormattedDate;
       }
     }
   }, {
@@ -48,24 +47,27 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
     }
   }, {
     key: "getSpreadsheetDataUsingFetch",
-    value: function getSpreadsheetDataUsingFetch() {
-      // Read data from the first sheet of the target document.
-      // It cannot be used unless everyone has been given read permission.
-      // It must be a spreadsheet document with a header, as in the example document below.
-      // spreadsheet document for example: https://docs.google.com/spreadsheets/d/10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps/edit#gid=1719755213
-      if (!this.id) return null;
-      let url = `https://docs.google.com/spreadsheets/d/${this.id}/gviz/tq?`;
+    value: function () {
+      var _getSpreadsheetDataUsingFetch = _asyncToGenerator(function* () {
+        if (!this.id) return null;
+        let url = `https://docs.google.com/spreadsheets/d/${this.id}/gviz/tq?`;
+        url += this.sheetId ? `gid=${this.sheetId}` : `sheet=${this.sheetName}`;
 
-      if (this.sheetId) {
-        url = url.concat(`gid=${this.sheetId}`);
-      } else if (this.sheetName) {
-        url = url.concat(`sheet=${this.sheetName}`);
+        try {
+          const response = yield fetch(url);
+          return response && response.ok ? response.text() : null;
+        } catch (e) {
+          console.error('Error fetching spreadsheet data:', e);
+          return null;
+        }
+      });
+
+      function getSpreadsheetDataUsingFetch() {
+        return _getSpreadsheetDataUsingFetch.apply(this, arguments);
       }
 
-      return fetch(url).then(r => r && r.ok && r.text ? r.text() : null).catch(
-      /* istanbul ignore next */
-      _ => null);
-    }
+      return getSpreadsheetDataUsingFetch;
+    }()
   }, {
     key: "normalizeRow",
     value: function normalizeRow(rows) {
@@ -77,7 +79,7 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
       return rows.map(({
         c: row
       }) => this.normalizeRow(row)).map(row => row.reduce((p, c, i) => c.v !== null && c.v !== undefined ? Object.assign(p, {
-        [header[i]]: this.isDate(c.v) ? c.f ?? c.v : c.v
+        [header[i]]: this.useFormattedDate && this.isDate(c.v) ? c.f ?? c.v : c.v
       }) : p, {}));
     }
   }, {
@@ -101,16 +103,18 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
           const header = this.normalizeRow(headerRow.c).map(row => row.v);
           rows = this.applyHeaderIntoRows(header, originalRows);
         }
-      } catch (e) {}
+      } catch (e) {
+        console.error('Error parsing spreadsheet data:', e);
+      }
 
       return rows;
     }
   }, {
     key: "parse",
     value: function () {
-      var _parse = _asyncToGenerator(function* (spreadsheetId, sheetInfo) {
+      var _parse = _asyncToGenerator(function* (spreadsheetId, option) {
         if (spreadsheetId) this.id = spreadsheetId;
-        if (sheetInfo) this.parseSheetInfo(sheetInfo);
+        if (option) this.setOption(option);
         if (!this.id) throw new Error('SpreadsheetId is required.');
         const spreadsheetResponse = yield this.getSpreadsheetDataUsingFetch();
         if (spreadsheetResponse === null) return [];
