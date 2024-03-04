@@ -181,6 +181,7 @@ class Test {
       const expectedError = new Error('SpreadsheetId is required.')
 
       t.deepEqual(actualError, expectedError)
+      t.end()
     })
 
     test('should return expected array if document has no labels in cols', async (t) => {
@@ -192,6 +193,7 @@ class Test {
       ]
 
       t.deepEqual(actualArray, expectedArray)
+      t.end()
     })
 
     test('should return expected array even if there are empty cell', async (t) => {
@@ -206,6 +208,7 @@ class Test {
       ]
 
       t.deepEqual(actualArray, expectedArray)
+      t.end()
     })
 
     test('should return false value when explicitly exist in cell', (t) => {
@@ -216,8 +219,8 @@ class Test {
 
       const result = this.parser.applyHeaderIntoRows(givenHeader, givenRows)
       const expected = [{ a: 1, b: 'FALSE', c: false }]
-      t.deepEqual(result, expected)
 
+      t.deepEqual(result, expected)
       t.end()
     })
 
@@ -228,10 +231,94 @@ class Test {
       ]
 
       const result = this.parser.applyHeaderIntoRows(givenHeader, givenRows)
-      const expected = [{ a: 1, b: '2024-01-01', c: '2024-12-01' }]
+      const expected = [{ a: 1, b: 'Date(2024,0,1)', c: 'Date(2024,11,1)' }]
+
       t.deepEqual(result, expected)
       t.end()
     })
+
+    test('should return formatted date string when useFormattedDate option is true', async (t) => {
+      this.parser.useFormattedDate = true
+
+      const givenHeader = ['a', 'b', 'c']
+      const givenRows = [
+        { c: [{ v: 1, f: '1' }, { v: 'Date(2024,0,1)', f: '2024-01-01' }, { v: 'Date(2024,11,1)', f: '2024-12-01' }] },
+      ]
+
+      const result = this.parser.applyHeaderIntoRows(givenHeader, givenRows)
+      const expected = [{ a: 1, b: '2024-01-01', c: '2024-12-01' }]
+
+      t.deepEqual(result, expected)
+      t.end()
+    })
+
+    test('parse method should return correct array for Sheet1 when sheetId is specified', async (t) => {
+      this.parser.id = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
+      const sheetName = 'Sheet2' // should be ignored
+      const sheetIdForSheet1 = '1839148703'
+
+      const result = await this.parser.parse(null, { sheetName, sheetId: sheetIdForSheet1 })
+      const expected = [
+        { a: 1, b: 2, c: 3 },
+        { a: 4, b: 5, c: 6 },
+        { a: 7, b: 8, c: 9 }
+      ]
+
+      t.deepEqual(result, expected, 'Result for Sheet1 should match expected array')
+      t.end()
+    })
+    
+    test('parse method should return correct array for Sheet2 when sheetId is specified', async (t) => {
+      this.parser.id = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
+      const sheetName = 'Sheet1' // should be ignored
+      const sheetIdForSheet2 = '784337977'
+
+      const result = await this.parser.parse(null, { sheetName, sheetId: sheetIdForSheet2 })
+      const expected = [
+        { a: 10, b: 20, c: 30 },
+        { a: 40, b: 50, c: 60 },
+        { a: 70, b: 80, c: 90 }
+      ]
+
+      t.deepEqual(result, expected, 'Result for Sheet2 should match expected array')
+      t.end()
+    })
+
+    test('parse method should return correct array for Sheet3 when sheetId is specified', async (t) => {
+      this.parser.id = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
+      const sheetName = 'Sheet1' // should be ignored
+      const sheetIdForSheet3 = '621371424'
+      const option = {
+        useFormattedDate: true,
+        sheetName,
+        sheetId: sheetIdForSheet3
+      }
+
+      const result = await this.parser.parse(null, option)
+      const expected = [
+        { a: 1, b: '2024-01-01' },
+        { a: 2, b: '2024-12-31' },
+        { a: 3, b: '2025-01-01' },
+        { a: 4, b: '2025-12-31' },
+        { a: 5, b: '2026-01-01' }
+      ]
+      t.deepEqual(result, expected, 'Result for Sheet3 should match expected array')
+
+      // change useFormattedDate to false
+      option.useFormattedDate = false
+
+      const resultWithoutFormattedDate = await this.parser.parse(null, option)
+      const expectedWithoutFormattedDate = [
+        { a: 1, b: 'Date(2024,0,1)' },
+        { a: 2, b: 'Date(2024,11,31)' },
+        { a: 3, b: 'Date(2025,0,1)' },
+        { a: 4, b: 'Date(2025,11,31)' },
+        { a: 5, b: 'Date(2026,0,1)' }
+      ]
+      t.deepEqual(resultWithoutFormattedDate, expectedWithoutFormattedDate, 'Result for Sheet3 should match expected array without formatted date')
+      t.end()
+    })
+  
   }
 }
 
