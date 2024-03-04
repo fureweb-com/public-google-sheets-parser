@@ -24,6 +24,47 @@ The document that you intend to use must be a Google Sheet that is set to "publi
 
 You have the option to specify the name of the sheet's tab to retrieve data from a specific sheet. **This feature has been available since version 1.1.0.** Additionally, you can also specify the sheet's GID to obtain data from a specific sheet. **This feature has been added since version 1.3.0.**
 
+Additionally, from version 1.4.0 onwards, you have the option to control the formatting of date values retrieved from the spreadsheet. By default, dates are returned in the format provided by Google Sheets. However, with the `useFormattedDate` option, you can choose to receive dates as they are displayed in the spreadsheet, allowing for more consistent date formatting across your application. **This feature has been added since version 1.4.0.**
+
+When using this feature, setting `useFormattedDate` to `true` will ensure that dates are parsed and returned in the spreadsheet's display format. If `useFormattedDate` is set to `false` or left unspecified, dates will be returned in the standard format provided by Google's API.
+
+#### Usage (since v1.4.0)
+
+When initializing the `PublicGoogleSheetsParser` or calling the `parse` method, you can pass the `useFormattedDate` option as part of the configuration object. Set `useFormattedDate` to `true` to get the dates in their original string format.
+
+- Example usage:
+
+```js
+const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
+const option = { sheetName: 'Sheet3', useFormattedDate: true }
+const parser = new PublicGoogleSheetsParser(spreadsheetId, option)
+
+const data1 = await parser.parse()
+console.log(data1)
+/* data1 should be like below:
+  [
+    { a: 1, b: '2024-01-01' },
+    { a: 2, b: '2024-12-31' },
+    { a: 3, b: '2025-01-01' },
+    { a: 4, b: '2025-12-31' },
+    { a: 5, b: '2026-01-01' }
+  ]
+*/
+
+parser.setOption({ useFormattedDate: false })
+const data2 = await parser.parse()
+console.log(data2)
+/* data2 should be like below:
+  [
+    { a: 1, b: 'Date(2024,0,1)' },
+    { a: 2, b: 'Date(2024,11,31)' },
+    { a: 3, b: 'Date(2025,0,1)' },
+    { a: 4, b: 'Date(2025,11,31)' },
+    { a: 5, b: 'Date(2026,0,1)' }
+  ]
+*/
+```
+
 It does not work in browsers where the [fetch API](https://caniuse.com/fetch) is not available.
 
 **No API key required.** This means that the server does not need to use the private key to use the SDK.
