@@ -1,26 +1,27 @@
 const isBrowser = typeof require === 'undefined'
 const fetch = isBrowser ? /* istanbul ignore next */window.fetch : require('../src/fetch')
+
 class PublicGoogleSheetsParser {
-  constructor (spreadsheetId, sheetInfo) {
+  constructor (spreadsheetId, option) {
     this.id = spreadsheetId
-    this.parseSheetInfo(sheetInfo)
+    this.setOption(option)
   }
 
-  /**
-   * Parses the given object or string into sheetName and/or sheetId.
-   * If a string is given, sheetName is set.
-   * If an object is given, its sheetId and sheetName properties are set.
-    * @param sheetInfo
-   */
-  parseSheetInfo (sheetInfo) {
-    if (sheetInfo) {
-      if (typeof sheetInfo === 'string') {
-        this.sheetName = sheetInfo
-        this.sheetId = null
-      } else if (typeof sheetInfo === 'object') {
-        this.sheetName = sheetInfo.sheetName
-        this.sheetId = sheetInfo.sheetId
-      }
+  setOption (option) {
+    if (!option) {
+      this.sheetName = this.sheetName || null
+      this.sheetId = this.sheetId || null
+      this.useFormattedDate = this.useFormattedDate || false
+      return
+    }
+
+    if (typeof option === 'string') {
+      this.sheetName = option
+      this.sheetId = this.sheetId || null
+    } else if (typeof option === 'object') {
+      this.sheetName = option.sheetName || this.sheetName
+      this.sheetId = option.sheetId || this.sheetId
+      this.useFormattedDate = option.hasOwnProperty('useFormattedDate') ? option.useFormattedDate : this.useFormattedDate
     }
   }
 
@@ -28,22 +29,19 @@ class PublicGoogleSheetsParser {
     return date && typeof date === 'string' && /Date\((\d+),(\d+),(\d+)\)/.test(date)
   }
 
-  getSpreadsheetDataUsingFetch () {
-    // Read data from the first sheet of the target document.
-    // It cannot be used unless everyone has been given read permission.
-    // It must be a spreadsheet document with a header, as in the example document below.
-    // spreadsheet document for example: https://docs.google.com/spreadsheets/d/10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps/edit#gid=1719755213
+  async getSpreadsheetDataUsingFetch () {
     if (!this.id) return null
-    let url = `https://docs.google.com/spreadsheets/d/${this.id}/gviz/tq?`
-    if (this.sheetId) {
-      url = url.concat(`gid=${this.sheetId}`)
-    } else if (this.sheetName) {
-      url = url.concat(`sheet=${this.sheetName}`)
-    }
 
-    return fetch(url)
-      .then((r) => r && r.ok && r.text ? r.text() : null)
-      .catch(/* istanbul ignore next */(_) => null)
+    let url = `https://docs.google.com/spreadsheets/d/${this.id}/gviz/tq?`
+    url += this.sheetId ? `gid=${this.sheetId}` : `sheet=${this.sheetName}`
+
+    try {
+      const response = await fetch(url)
+      return response && response.ok ? response.text() : null
+    } catch (e) {
+      console.error('Error fetching spreadsheet data:', e)
+      return null
+    }
   }
 
   normalizeRow (rows) {
@@ -53,7 +51,9 @@ class PublicGoogleSheetsParser {
   applyHeaderIntoRows (header, rows) {
     return rows
       .map(({ c: row }) => this.normalizeRow(row))
-      .map((row) => row.reduce((p, c, i) => (c.v !== null && c.v !== undefined) ? Object.assign(p, { [header[i]]: this.isDate(c.v) ? c.f ?? c.v : c.v }) : p, {}))
+      .map((row) => row.reduce((p, c, i) => (c.v !== null && c.v !== undefined)
+        ? Object.assign(p, { [header[i]]: this.useFormattedDate && this.isDate(c.v) ? c.f ?? c.v : c.v })
+        : p, {}))
   }
 
   getItems (spreadsheetResponse) {
@@ -72,14 +72,16 @@ class PublicGoogleSheetsParser {
 
         rows = this.applyHeaderIntoRows(header, originalRows)
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error('Error parsing spreadsheet data:', e)
+    }
 
     return rows
   }
 
-  async parse (spreadsheetId, sheetInfo) {
+  async parse (spreadsheetId, option) {
     if (spreadsheetId) this.id = spreadsheetId
-    if (sheetInfo) this.parseSheetInfo(sheetInfo)
+    if (option) this.setOption(option)
 
     if (!this.id) throw new Error('SpreadsheetId is required.')
 
