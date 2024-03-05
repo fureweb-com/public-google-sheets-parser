@@ -28,10 +28,7 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
         this.sheetName = this.sheetName || null;
         this.sheetId = this.sheetId || null;
         this.useFormattedDate = this.useFormattedDate || false;
-        return;
-      }
-
-      if (typeof option === 'string') {
+      } else if (typeof option === 'string') {
         this.sheetName = option;
         this.sheetId = this.sheetId || null;
       } else if (typeof option === 'object') {
@@ -57,7 +54,10 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
           const response = yield fetch(url);
           return response && response.ok ? response.text() : null;
         } catch (e) {
+          /* istanbul ignore next */
           console.error('Error fetching spreadsheet data:', e);
+          /* istanbul ignore next */
+
           return null;
         }
       });
@@ -79,7 +79,7 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
       return rows.map(({
         c: row
       }) => this.normalizeRow(row)).map(row => row.reduce((p, c, i) => c.v !== null && c.v !== undefined ? Object.assign(p, {
-        [header[i]]: this.useFormattedDate && this.isDate(c.v) ? c.f ?? c.v : c.v
+        [header[i]]: this.useFormattedDate && this.isDate(c.v) ? c.f || c.v : c.v
       }) : p, {}));
     }
   }, {
@@ -104,6 +104,7 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
           rows = this.applyHeaderIntoRows(header, originalRows);
         }
       } catch (e) {
+        /* istanbul ignore next */
         console.error('Error parsing spreadsheet data:', e);
       }
 
