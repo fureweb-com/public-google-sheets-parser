@@ -318,7 +318,63 @@ class Test {
       t.deepEqual(resultWithoutFormattedDate, expectedWithoutFormattedDate, 'Result for Sheet3 should match expected array without formatted date')
       t.end()
     })
+
+    test('setOption method should correctly handle different types of options', (t) => {
+      // Test with string option
+      this.parser.setOption('test-sheet-name')
+      t.equal(this.parser.sheetName, 'test-sheet-name', 'Sheet name should be set from string option')
+      
+      // Test with object option
+      const options = { sheetName: 'test', sheetId: '123', useFormattedDate: true }
+      this.parser.setOption(options)
+      t.equal(this.parser.sheetName, 'test', 'Sheet name should be set from object option')
+      t.equal(this.parser.sheetId, '123', 'Sheet ID should be set from object option')
+      t.equal(this.parser.useFormattedDate, true, 'Use formatted date should be set from object option')
+
+      // ignore sheetId when sheetId is already set
+      this.parser.setOption({ sheetId: null })
+      t.equal(this.parser.sheetId, '123', 'Sheet ID should not be changed when option is not provided')
+
+      // Test without option
+      this.parser.setOption()
+      t.equal(this.parser.useFormattedDate, true, 'Use formatted date should not be changed when option is not provided')
+
+      t.end()
+    })
+
+    test('isDate method should correctly identify valid and invalid date strings', (t) => {
+      const validDateString = 'Date(2020,1,1)'
+      t.true(this.parser.isDate(validDateString), 'Should return true for a valid date string')
+
+      const invalidDateString = 'Invalid Date String'
+      t.false(this.parser.isDate(invalidDateString), 'Should return false for an invalid date string')
+
+      t.end()
+    })
+
+    test('getSpreadsheetDataUsingFetch method should handle errors properly', async (t) => {
+      this.parser.id = 'invalid-id'
   
+      // Simulate fetch failure by setting an invalid ID
+      const result = await this.parser.getSpreadsheetDataUsingFetch()
+      t.equal(result, null, 'Should return null in case of fetch failure')
+  
+      t.end()
+    })
+
+    test('applyHeaderIntoRows method should return expected array when date is included', (t) => {
+      const givenHeader = ['a', 'b']
+      const givenRows = [
+        { c: [{ v: 'Date(2024,0,1)', f: '2024-01-01' }, { v: 'Date(2024,0,1)', f: '' }] },
+      ]
+
+      this.parser.setOption({ useFormattedDate: true })
+      const result = this.parser.applyHeaderIntoRows(givenHeader, givenRows)
+      const expected = [{ a: '2024-01-01', b: 'Date(2024,0,1)' }]
+      t.deepEqual(result, expected)
+
+      t.end()
+    })
   }
 }
 
