@@ -375,6 +375,20 @@ class Test {
 
       t.end()
     })
+
+    test('applyHeaderIntoRows method should return expected array when useFormat is true', (t) => {
+      const givenHeader = ['a', 'b']
+      const givenRows = [
+        { c: [{ v: 1000, f: '$1,000' }, { v: 2000, f: '' }] },
+      ]
+
+      this.parser.setOption({ useFormat: true })
+      const result = this.parser.applyHeaderIntoRows(givenHeader, givenRows)
+      const expected = [{ a: '$1,000', b: 2000 }]
+      t.deepEqual(result, expected)
+
+      t.end()
+    })
   }
 }
 
