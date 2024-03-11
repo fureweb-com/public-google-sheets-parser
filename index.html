@@ -94,8 +94,8 @@
       <input id="sheet-name" type="text" placeholder="Insert your sheetName if you need (optional)">
     </div>
     <div class="row">
-      <label for="use-formatted-date">Use Formatted Date:</label>
-      <input id="use-formatted-date" type="checkbox">
+      <label for="use-format">useFormat:</label>
+      <input id="use-format" type="checkbox">
     </div>
     <div class="row">
       <button class="get-results">Get Results</button><br/>
@@ -108,7 +108,7 @@
   </div>
 
   <pre class="result" style="padding: 16px; border: 1px solid #dedede; background-color: #eee"></pre>
-  <script src="https://cdn.jsdelivr.net/npm/public-google-sheets-parser@1.4.0/dist/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/public-google-sheets-parser@1.5.0/dist/index.min.js"></script>
   <script>
     (() => {
       const resultElement = document.querySelector('.result')
@@ -124,7 +124,7 @@
 
       const getItems = () => {
         const spreadsheetIdElement = document.querySelector('#sheet-id')
-        const useFormattedDate = document.querySelector('#use-formatted-date').checked
+        const useFormat = document.querySelector('#use-format').checked
         if (!spreadsheetIdElement.value) {
           window.alert('Please insert your public spreadsheet ID')
           return spreadsheetIdElement.focus()
@@ -132,7 +132,7 @@
         const spreadsheetId = spreadsheetIdElement.value.trim()
         const sheetId = document.querySelector('#gid').value.trim()
         const sheetName = document.querySelector('#sheet-name').value.trim()
-        const sheetInfo = { sheetId, sheetName, useFormattedDate }
+        const sheetInfo = { sheetId, sheetName, useFormat }
         const parser = new PublicGoogleSheetsParser(spreadsheetId, sheetInfo)
         setLoading()
         parser.parse().then((items) => {
