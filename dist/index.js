@@ -28,6 +28,7 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
         this.sheetName = this.sheetName || null;
         this.sheetId = this.sheetId || null;
         this.useFormattedDate = this.useFormattedDate || false;
+        this.useFormat = this.useFormat || false;
       } else if (typeof option === 'string') {
         this.sheetName = option;
         this.sheetId = this.sheetId || null;
@@ -35,6 +36,7 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
         this.sheetName = option.sheetName || this.sheetName;
         this.sheetId = option.sheetId || this.sheetId;
         this.useFormattedDate = option.hasOwnProperty('useFormattedDate') ? option.useFormattedDate : this.useFormattedDate;
+        this.useFormat = option.hasOwnProperty('useFormat') ? option.useFormat : this.useFormat;
       }
     }
   }, {
@@ -79,7 +81,7 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
       return rows.map(({
         c: row
       }) => this.normalizeRow(row)).map(row => row.reduce((p, c, i) => c.v !== null && c.v !== undefined ? Object.assign(p, {
-        [header[i]]: this.useFormattedDate && this.isDate(c.v) ? c.f || c.v : c.v
+        [header[i]]: this.useFormat ? c.f || c.v : this.useFormattedDate && this.isDate(c.v) ? c.f || c.v : c.v
       }) : p, {}));
     }
   }, {
