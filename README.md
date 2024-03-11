@@ -1,15 +1,15 @@
 # Public Google Sheets Parser
 
-![Author](https://img.shields.io/badge/Author-fureweb-blue)
-![checks](https://img.shields.io/github/checks-status/fureweb-com/public-google-sheets-parser/main)
-![npm package](https://img.shields.io/npm/v/public-google-sheets-parser.svg)
-![codecov](https://img.shields.io/codecov/c/github/fureweb-com/public-google-sheets-parser)
-![license](https://img.shields.io/npm/l/public-google-sheets-parser)
-![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)
-![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ffureweb-com%2Fpublic-google-sheets-parser)
-![GitHub stars](https://img.shields.io/github/stars/fureweb-com/public-google-sheets-parser)
-![downloads](https://img.shields.io/npm/dm/public-google-sheets-parser)
-![JSDelivr CDN](https://data.jsdelivr.com/v1/package/npm/public-google-sheets-parser/badge)
+[![Author](https://img.shields.io/badge/Author-fureweb-blue)](https://github.com/fureweb-com)
+[![checks](https://img.shields.io/github/checks-status/fureweb-com/public-google-sheets-parser/main)](https://img.shields.io/github/checks-status/fureweb-com/public-google-sheets-parser/main)
+[![npm package](https://img.shields.io/npm/v/public-google-sheets-parser.svg)](https://www.npmjs.com/package/public-google-sheets-parser)
+[![codecov](https://img.shields.io/codecov/c/github/fureweb-com/public-google-sheets-parser)](https://codecov.io/gh/fureweb-com/public-google-sheets-parser)
+[![license](https://img.shields.io/npm/l/public-google-sheets-parser)](https://github.com/fureweb-com/public-google-sheets-parser/blob/main/LICENSE)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ffureweb-com%2Fpublic-google-sheets-parser)](https://hits.seeyoufarm.com)
+[![GitHub stars](https://img.shields.io/github/stars/fureweb-com/public-google-sheets-parser)](https://github.com/fureweb-com/public-google-sheets-parser/stargazers)
+[![downloads](https://img.shields.io/npm/dm/public-google-sheets-parser)](https://www.npmjs.com/package/public-google-sheets-parser)
+[![JSDelivr CDN](https://data.jsdelivr.com/v1/package/npm/public-google-sheets-parser/badge)](https://www.jsdelivr.com/package/npm/public-google-sheets-parser)
 
 ![Introduction](introduction.png)
 
