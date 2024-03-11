@@ -1,193 +1,163 @@
 # Public Google Sheets Parser
 
-[![Author](https://img.shields.io/badge/Author-fureweb-blue)](https://github.com/fureweb-com)
-[![checks](https://img.shields.io/github/checks-status/fureweb-com/public-google-sheets-parser/main)](https://img.shields.io/github/checks-status/fureweb-com/public-google-sheets-parser/main)
-[![npm package](https://img.shields.io/npm/v/public-google-sheets-parser.svg)](https://www.npmjs.com/package/public-google-sheets-parser)
-[![codecov](https://img.shields.io/codecov/c/github/fureweb-com/public-google-sheets-parser)](https://codecov.io/gh/fureweb-com/public-google-sheets-parser)
-[![license](https://img.shields.io/npm/l/public-google-sheets-parser)](https://github.com/fureweb-com/public-google-sheets-parser/blob/main/LICENSE)
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ffureweb-com%2Fpublic-google-sheets-parser)](https://hits.seeyoufarm.com)
-[![GitHub stars](https://img.shields.io/github/stars/fureweb-com/public-google-sheets-parser)](https://github.com/fureweb-com/public-google-sheets-parser/stargazers)
-[![downloads](https://img.shields.io/npm/dm/public-google-sheets-parser)](https://www.npmjs.com/package/public-google-sheets-parser)
-[![JSDelivr CDN](https://data.jsdelivr.com/v1/package/npm/public-google-sheets-parser/badge)](https://www.jsdelivr.com/package/npm/public-google-sheets-parser)
+![Author](https://img.shields.io/badge/Author-fureweb-blue)
+![checks](https://img.shields.io/github/checks-status/fureweb-com/public-google-sheets-parser/main)
+![npm package](https://img.shields.io/npm/v/public-google-sheets-parser.svg)
+![codecov](https://img.shields.io/codecov/c/github/fureweb-com/public-google-sheets-parser)
+![license](https://img.shields.io/npm/l/public-google-sheets-parser)
+![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)
+![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ffureweb-com%2Fpublic-google-sheets-parser)
+![GitHub stars](https://img.shields.io/github/stars/fureweb-com/public-google-sheets-parser)
+![downloads](https://img.shields.io/npm/dm/public-google-sheets-parser)
+![JSDelivr CDN](https://data.jsdelivr.com/v1/package/npm/public-google-sheets-parser/badge)
 
 ![Introduction](introduction.png)
 
-### Demo page
-[https://fureweb-com.github.io/public-google-sheets-parser/](https://fureweb-com.github.io/public-google-sheets-parser/)
+### [Demo Page (click here)](https://fureweb-com.github.io/public-google-sheets-parser/)
 
+### Introduction
 
-It is a simple and **zero dependency** parser that helps you use public Google sheets document as if they were a database.
+The Public Google Sheets Parser is a zero-dependency library that enables the use of publicly shared Google Sheets as a data source, akin to a database. Ensure your Google Sheet is public and formatted correctly with headers in the first row for seamless integration.
 
+### Features:
 
-The document that you intend to use must be a Google Sheet that is set to "public" and must contain a header in the first row. For instance, [you can use a Google Sheet like the one in the example provided](https://docs.google.com/spreadsheets/d/10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps/edit#gid=1839148703).
-
-You have the option to specify the name of the sheet's tab to retrieve data from a specific sheet. **This feature has been available since version 1.1.0.** Additionally, you can also specify the sheet's GID to obtain data from a specific sheet. **This feature has been added since version 1.3.0.**
-
-Additionally, from version 1.4.0 onwards, you have the option to control the formatting of date values retrieved from the spreadsheet. By default, dates are returned in the format provided by Google Sheets. However, with the `useFormattedDate` option, you can choose to receive dates as they are displayed in the spreadsheet, allowing for more consistent date formatting across your application. **This feature has been added since version 1.4.0.**
-
-When using this feature, setting `useFormattedDate` to `true` will ensure that dates are parsed and returned in the spreadsheet's display format. If `useFormattedDate` is set to `false` or left unspecified, dates will be returned in the standard format provided by Google's API.
-
-#### Usage (since v1.4.0)
-
-When initializing the `PublicGoogleSheetsParser` or calling the `parse` method, you can pass the `useFormattedDate` option as part of the configuration object. Set `useFormattedDate` to `true` to get the dates in their original string format.
-
-- Example usage:
-
-```js
-const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
-const option = { sheetName: 'Sheet3', useFormattedDate: true }
-const parser = new PublicGoogleSheetsParser(spreadsheetId, option)
-
-const data1 = await parser.parse()
-console.log(data1)
-/* data1 should be like below:
-  [
-    { a: 1, b: '2024-01-01' },
-    { a: 2, b: '2024-12-31' },
-    { a: 3, b: '2025-01-01' },
-    { a: 4, b: '2025-12-31' },
-    { a: 5, b: '2026-01-01' }
-  ]
-*/
-
-parser.setOption({ useFormattedDate: false })
-const data2 = await parser.parse()
-console.log(data2)
-/* data2 should be like below:
-  [
-    { a: 1, b: 'Date(2024,0,1)' },
-    { a: 2, b: 'Date(2024,11,31)' },
-    { a: 3, b: 'Date(2025,0,1)' },
-    { a: 4, b: 'Date(2025,11,31)' },
-    { a: 5, b: 'Date(2026,0,1)' }
-  ]
-*/
-```
-
-It does not work in browsers where the [fetch API](https://caniuse.com/fetch) is not available.
-
-**No API key required.** This means that the server does not need to use the private key to use the SDK.
-
-You can also use it via free API. Please see [this documentation](https://api.fureweb.com).
-If you have a public spreadsheet document, and the first row is a header and you have more than one row of data, you can call it free of charge through this API and use the result as a JSON response.
-
+- **Sheet Name or GID Selection:** Fetch data from specific sheets by name or GID (since v1.1.0 and v1.3.0 respectively).
+- **Formatted Dates:** While you can opt to retrieve dates in their displayed format within the spreadsheet with `useFormattedDate` (since v1.4.0), it is recommended to use the `useFormat` option available since v1.5.0 for more precise control and accuracy. The `useFormat` option ensures that both numeric and date values are returned in their formatted string representations as they appear in your Google Sheets, providing a more accurate and consistent result.
+- **Custom Formatting:** Leverage `useFormat` to get numeric and date values as formatted in Google Sheets (since v1.5.0).
+- **Browser and Node.js Support:** Utilize in various environments though note it requires Fetch API compatibility.
+- **API Access:** No API key required for the SDK; access data through the provided free API for public sheets.
 
 ### Installation
 
-With yarn:
 ```bash
-$ yarn add public-google-sheets-parser
+yarn add public-google-sheets-parser
+# OR
+npm i public-google-sheets-parser
 ```
 
-With npm:
-```bash
-$ npm i public-google-sheets-parser
-```
+### Usage
 
-### Usage example
-- Node.js
-```js
+Node.js:
+```javascript
 const PublicGoogleSheetsParser = require('public-google-sheets-parser')
-
-const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
-
-// 1. You can pass spreadsheetId when instantiating the parser:
+const spreadsheetId = 'your_spreadsheet_id_here'
 const parser = new PublicGoogleSheetsParser(spreadsheetId)
-parser.parse().then((items) => {
-  // items should be [{"a":1,"b":2,"c":3},{"a":4,"b":5,"c":6},{"a":7,"b":8,"c":9}]
-})
 
-// 2. You can change spreadsheetId on runtime:
-const anotherSpreadsheetId = '1oCgY0UHHRQ95snw7URFpOOL_DQcVG_wydlOoGiTof5E'
-parser.id = anotherSpreadsheetId
-parser.parse().then((items) => {
-  /* items should be
-  [
-    {"id":1,"title":"This is a title of 1","description":"This is a description of 1","createdAt":"2020-11-12","modifiedAt":"2020-11-18"},
-    {"id":2,"title":"This is a title of 2","description":"This is a description of 2","createdAt":"2020-11-12","modifiedAt":"2020-11-18"},
-    ...
-  ]
-  */
-})
-
-// 3. You can pass the spreadsheet ID when call parse method:
-parser.parse(spreadsheetId).then((items) => {
-  // items should be [{"a":1,"b":2,"c":3},{"a":4,"b":5,"c":6},{"a":7,"b":8,"c":9}]
-})
-
-
-// 4. You can also retrieve a specific sheet to get by either passing the sheet name as a string (since v1.1.0):
-parser.parse(spreadsheetId, 'Sheet2').then((items) => {
-  // items should be [{"a":10,"b":20,"c":30},{"a":40,"b":50,"c":60},{"a":70,"b":80,"c":90}]
-})
-// ...or as an object (since v1.3.0) that specifies the sheet's name or ID. If both are provided, sheet ID is used:
-parser.parse(spreadsheetId, { sheetId: '784337977' }).then((items) => {
-  // items should be [{"a":10,"b":20,"c":30},{"a":40,"b":50,"c":60},{"a":70,"b":80,"c":90}]
-})
-
-// Sheet name or sheet ID can also be passed during instantiation:
-const parser = new PublicGoogleSheetsParser(spreadsheetId, { sheetId: '784337977'})
-parser.parse().then((items) => {
-  // items should be [{"a":10,"b":20,"c":30},{"a":40,"b":50,"c":60},{"a":70,"b":80,"c":90}]
-})
-
-
+parser.parse().then(console.log)
 ```
 
-You can use any of the 4 methods you want!
+Browser:
+```html
+<script src="https://cdn.jsdelivr.net/npm/public-google-sheets-parser@latest"></script>
+<script>
+  const parser = new PublicGoogleSheetsParser('your_spreadsheet_id_here')
+  parser.parse().then(data => console.log(data))
+</script>
+```
 
-- with import (Vue.js or whatever)
-```js
-// templates...
+Vue v2:
+```html
+<template>
+  <div>
+    <ul v-if="items.length">
+      <li v-for="(item, index) in items" :key="index">{{ item }}</li>
+    </ul>
+  </div>
+</template>
 
+<script>
 import PublicGoogleSheetsParser from 'public-google-sheets-parser'
 
 export default {
-  data () {
+  data() {
     return {
       items: [],
     }
   },
-  computed: {
-    parser () {
-      return new PublicGoogleSheetsParser()
-    },
-  },
-  methods: {
-    async getItems (spreadsheetId) {
-      this.items = await this.parser.parse(spreadsheetId)
-    },
+  mounted() {
+    const parser = new PublicGoogleSheetsParser('your_spreadsheet_id_here')
+    parser.parse().then(data => {
+      this.items = data
+    })
   },
 }
-
-// styles...
-```
-
-
-- browser
-```html
-<script src="https://cdn.jsdelivr.net/npm/public-google-sheets-parser@latest"></script>
-
-<script>
-const spreadsheetId = '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps'
-const parser = new PublicGoogleSheetsParser()
-parser.parse(spreadsheetId).then((items) => {
-  // items should be [{ a: 1, b: 2, c: 3 },{ a: 4, b: 5, c: 6 },{ a: 7, b: 8, c: 9 }]
-})
-parser.parse(spreadsheetId, 'Sheet2').then((items) => {
-  // items should be [{ a: 10, b: 20, c: 30 }, { a: 40, b: 50, c: 60 }, { a: 70, b: 80, c: 90 }]
-})
 </script>
 ```
 
-- free API ([documentation](https://api.fureweb.com))
+React:
+```javascript
+import React, { useState, useEffect } from 'react'
+import PublicGoogleSheetsParser from 'public-google-sheets-parser'
 
-```sh
-curl -X GET "https://api.fureweb.com/spreadsheets/10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps" -H "accept: */*"
+const SpreadsheetData = () => {
+  const [items, setItems] = useState([])
 
-# response (application/json)
-{"data":[{"a":1,"b":2,"c":3},{"a":4,"b":5,"c":6},{"a":7,"b":8,"c":9}]}
+  useEffect(() => {
+    const parser = new PublicGoogleSheetsParser('your_spreadsheet_id_here')
+    parser.parse().then(data => {
+      setItems(data)
+    })
+  }, [])
+
+  return (
+    <div>
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>{JSON.stringify(item)}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+export default SpreadsheetData
 ```
-**That's it!**
 
+### Options and Configurations
+
+- `useFormattedDate`: Although you can parse date values according to the spreadsheet's format using `useFormattedDate`, it is now recommended to use the `useFormat` option for more comprehensive and precise formatting control. The `useFormat` option not only affects dates but also applies to numeric values, ensuring consistency and accuracy across your data.
+
+- `useFormat`: Get data as formatted in the spreadsheet (applies to numbers and dates).
+- Specify sheet by name or GID to target specific data ranges.
+
+### Example with Options:
+```javascript
+const options = { sheetName: 'Sheet4', useFormat: true }
+const parser = new PublicGoogleSheetsParser('10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps', options)
+parser.parse().then((data) => {
+  // data will be like below:
+  // [
+  //   {
+  //     date: '2024년 1월 1일 월요일 오전 12시 0분 0초',
+  //     'with-format': '₩2,000.00',
+  //     'without-format': '5678'
+  //   },
+  //   {
+  //     date: '2024년 12월 1일 일요일 오전 12시 0분 0초',
+  //     'with-format': '₩2,000.00',
+  //     'without-format': '1234'
+  //   }
+  // ]
+})
+
+parser.setOption({ useFormat: false })
+parser.parse().then((data2) => {
+  // data2 will be like below:
+  // [
+  //   {
+  //     date: 'Date(2024,0,1,0,0,0)',
+  //     'with-format': 2000,
+  //     'without-format': 5678
+  //   },
+  //   {
+  //     date: 'Date(2024,11,1,0,0,0)',
+  //     'with-format': 2000,
+  //     'without-format': 1234
+  //   }
+  // ]
+})
+```
+
+### License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/fureweb-com/public-google-sheets-parser/blob/main/LICENSE) file for details.
