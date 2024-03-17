@@ -24,7 +24,7 @@ const nodeFetch = async (url) => {
       req.on('error', reject)
       req.end()
     }
-    else if (typeof window.fetch !== 'undefined') {
+    else if (typeof window !== 'undefined' && typeof window.fetch == 'function') {
       window.fetch(url)
         .then(response => response.text())
         .then(text => {
