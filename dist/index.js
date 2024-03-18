@@ -137,7 +137,7 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
 /* istanbul ignore next */
 
 
-if (isBrowser && !module) {
+if (isBrowser && typeof module === 'undefined') {
   window.PublicGoogleSheetsParser = PublicGoogleSheetsParser;
 } else {
   module.exports = PublicGoogleSheetsParser;

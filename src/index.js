@@ -96,7 +96,7 @@ class PublicGoogleSheetsParser {
 }
 
 /* istanbul ignore next */
-if (isBrowser && !module) {
+if (isBrowser && typeof module === 'undefined') {
   window.PublicGoogleSheetsParser = PublicGoogleSheetsParser
 } else {
   module.exports = PublicGoogleSheetsParser
