@@ -8,7 +8,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-const isBrowser = typeof require === 'undefined';
+const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 const fetch = isBrowser ?
 /* istanbul ignore next */
 window.fetch : require('../src/fetch');
@@ -137,7 +137,7 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
 /* istanbul ignore next */
 
 
-if (isBrowser) {
+if (isBrowser && !module) {
   window.PublicGoogleSheetsParser = PublicGoogleSheetsParser;
 } else {
   module.exports = PublicGoogleSheetsParser;
