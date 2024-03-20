@@ -61,7 +61,9 @@ class PublicGoogleSheetsParser {
     let rows = []
 
     try {
-      const parsedJSON = JSON.parse(spreadsheetResponse.split('\n')[1].replace(/google.visualization.Query.setResponse\(|\);/g, ''))
+      const payloadExtractRegex = /google\.visualization\.Query\.setResponse\(({.*})\);/
+      const [_, payload] = spreadsheetResponse.match(payloadExtractRegex)
+      const parsedJSON = JSON.parse(payload)
       const hasSomeLabelPropertyInCols = parsedJSON.table.cols.some(({ label }) => !!label)
       if (hasSomeLabelPropertyInCols) {
         const header = parsedJSON.table.cols.map(({ label }) => label)
