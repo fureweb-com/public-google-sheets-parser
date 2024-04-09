@@ -19,7 +19,5 @@ jobs:
       - name: upload coverage to codecov
         uses: codecov/codecov-action@v1
         with:
-          files: ./coverage/coverage.raw.json
-          flags: unittests
-          fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
