@@ -10,12 +10,12 @@ type TSheetName = string
 type TGID = string
 type TOption = TSheetName | ISheetOption
 
-declare class PublicGoogleSheetsParser {
+export class PublicGoogleSheetsParser {
   private id?: TSpreadSheetId
   private sheetName?: TSheetName
   private sheetId?: TGID
-  private useFormat: boolean = false
-  private useFormattedDate: boolean = false
+  private useFormat?: boolean
+  private useFormattedDate?: boolean
 
   constructor(spreadsheetId?: TSpreadSheetId, option?: TOption)
 
