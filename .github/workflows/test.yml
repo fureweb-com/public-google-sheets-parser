@@ -1,6 +1,6 @@
 name: tests with tape and check code coverage
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   test:
