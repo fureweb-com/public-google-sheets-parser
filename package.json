@@ -7,7 +7,9 @@
     "test": "node ./test",
     "lint": "eslint --format ./node_modules/eslint-friendly-formatter --ext .js .",
     "lint:fix": "eslint --format ./node_modules/eslint-friendly-formatter --ext .js . --fix",
-    "coverage": "rimraf coverage && istanbul cover tape ./test/index.js"
+    "coverage": "rimraf coverage && istanbul cover tape ./test/index.js",
+    "test:dist": "RUN_DIST_TESTS=true node ./test",
+    "test:integration": "RUN_INTEGRATION_TESTS=true node ./test"
   },
   "main": "src/index.js",
   "unpkg": "dist/index.js",

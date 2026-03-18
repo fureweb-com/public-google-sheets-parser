@@ -35,6 +35,16 @@ yarn add public-google-sheets-parser
 npm i public-google-sheets-parser
 ```
 
+### Testing
+
+```bash
+# Offline-safe unit tests (default)
+yarn test
+
+# Optional: test transpiled dist build too
+yarn test:dist
+```
+
 ### Usage
 
 Node.js:
