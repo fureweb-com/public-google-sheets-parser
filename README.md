@@ -35,6 +35,22 @@ yarn add public-google-sheets-parser
 npm i public-google-sheets-parser
 ```
 
+### Testing
+
+```bash
+# Offline-safe unit tests (default)
+yarn test
+
+# Optional: test transpiled dist build too
+yarn test:dist
+
+# Optional: run live network integration test(s)
+yarn test:integration
+
+# Verify TypeScript declaration files
+yarn test:types
+```
+
 ### Usage
 
 Node.js:
@@ -118,6 +134,7 @@ export default SpreadsheetData
 - `useFormattedDate`: Although you can parse date values according to the spreadsheet's format using `useFormattedDate`, it is now recommended to use the `useFormat` option for more comprehensive and precise formatting control. The `useFormat` option not only affects dates but also applies to numeric values, ensuring consistency and accuracy across your data.
 
 - `useFormat`: Get data as formatted in the spreadsheet (applies to numbers and dates).
+- `fetch`: Inject a custom `fetch` implementation for testing or unsupported environments.
 - Specify sheet by name or GID to target specific data ranges.
 
 ### Example with Options:

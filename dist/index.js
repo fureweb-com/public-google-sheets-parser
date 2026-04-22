@@ -9,7 +9,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
-const fetch = isBrowser ?
+const defaultFetch = isBrowser ?
 /* istanbul ignore next */
 window.fetch : require('../src/fetch');
 
@@ -18,6 +18,7 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
     _classCallCheck(this, PublicGoogleSheetsParser);
 
     this.id = spreadsheetId;
+    this.fetch = null;
     this.setOption(option);
   }
 
@@ -35,8 +36,9 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
       } else if (typeof option === 'object') {
         this.sheetName = option.sheetName || this.sheetName;
         this.sheetId = option.sheetId || this.sheetId;
-        this.useFormattedDate = option.hasOwnProperty('useFormattedDate') ? option.useFormattedDate : this.useFormattedDate;
-        this.useFormat = option.hasOwnProperty('useFormat') ? option.useFormat : this.useFormat;
+        this.useFormattedDate = Object.prototype.hasOwnProperty.call(option, 'useFormattedDate') ? option.useFormattedDate : this.useFormattedDate;
+        this.useFormat = Object.prototype.hasOwnProperty.call(option, 'useFormat') ? option.useFormat : this.useFormat;
+        this.fetch = typeof option.fetch === 'function' ? option.fetch : this.fetch;
       }
     }
   }, {
@@ -53,7 +55,8 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
         url += this.sheetId ? `gid=${this.sheetId}` : `sheet=${this.sheetName}`;
 
         try {
-          const response = yield fetch(url);
+          const fetcher = this.fetch || defaultFetch;
+          const response = yield fetcher(url);
           return response && response.ok ? response.text() : null;
         } catch (e) {
           /* istanbul ignore next */
@@ -91,7 +94,8 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
 
       try {
         const payloadExtractRegex = /google\.visualization\.Query\.setResponse\(({.*})\);/;
-        const [_, payload] = spreadsheetResponse.match(payloadExtractRegex);
+        const match = spreadsheetResponse.match(payloadExtractRegex);
+        const payload = match && match[1];
         const parsedJSON = JSON.parse(payload);
         const hasSomeLabelPropertyInCols = parsedJSON.table.cols.some(({
           label

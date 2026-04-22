@@ -3,6 +3,7 @@ interface ISheetOption {
   sheetId?: TGID
   useFormat?: boolean
   useFormattedDate?: boolean
+  fetch?: (url: string) => Promise<{ ok: boolean, text: () => Promise<string> }>
 }
 
 type TSpreadSheetId = string
@@ -10,12 +11,12 @@ type TSheetName = string
 type TGID = string
 type TOption = TSheetName | ISheetOption
 
-declare class PublicGoogleSheetsParser {
+export class PublicGoogleSheetsParser {
   private id?: TSpreadSheetId
   private sheetName?: TSheetName
   private sheetId?: TGID
-  private useFormat: boolean = false
-  private useFormattedDate: boolean = false
+  private useFormat?: boolean
+  private useFormattedDate?: boolean
 
   constructor(spreadsheetId?: TSpreadSheetId, option?: TOption)
 
@@ -24,7 +25,7 @@ declare class PublicGoogleSheetsParser {
   private normalizeRow(rows: any[]): any[]
   private applyHeaderIntoRows(header: string[], rows: any[]): any[]
   private getItems(spreadsheetResponse: string): any[]
-  
+
   setOption(option?: TOption): void
   parse(spreadsheetId?: TSpreadSheetId, option?: TOption): Promise<any[]>
 }

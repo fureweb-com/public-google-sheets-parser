@@ -7,7 +7,10 @@
     "test": "node ./test",
     "lint": "eslint --format ./node_modules/eslint-friendly-formatter --ext .js .",
     "lint:fix": "eslint --format ./node_modules/eslint-friendly-formatter --ext .js . --fix",
-    "coverage": "rimraf coverage && istanbul cover tape ./test/index.js"
+    "coverage": "rimraf coverage && istanbul cover tape ./test/index.js",
+    "test:dist": "npm run build:dist && RUN_DIST_TESTS=true node ./test",
+    "test:integration": "RUN_INTEGRATION_TESTS=true node ./test",
+    "test:types": "npx -y -p typescript tsc --pretty false --strict --noEmit --moduleResolution node16 --module node16 --target es2019 ./test/typescript/usage.ts"
   },
   "main": "src/index.js",
   "unpkg": "dist/index.js",
