@@ -248,6 +248,29 @@ class Test {
       t.equal(result, null)
       t.end()
     })
+
+    test('parse should use injected fetch and pass the selected sheet in the request URL', async (t) => {
+      const observedUrls = []
+      const parser = new this.PublicGoogleSheetsParser('spreadsheet-id', {
+        sheetName: 'Sheet2',
+        fetch: async (url) => {
+          observedUrls.push(url)
+          return {
+            ok: true,
+            text: async () => SHEET_FIXTURES.sheet2
+          }
+        }
+      })
+
+      const rows = await parser.parse()
+      t.equal(observedUrls[0], 'https://docs.google.com/spreadsheets/d/spreadsheet-id/gviz/tq?sheet=Sheet2')
+      t.deepEqual(rows, [
+        { a: 10, b: 20, c: 30 },
+        { a: 40, b: 50, c: 60 },
+        { a: 70, b: 80, c: 90 }
+      ])
+      t.end()
+    })
   }
 }
 
