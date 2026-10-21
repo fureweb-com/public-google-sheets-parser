@@ -1,0 +1,8 @@
+Release v1.6.0
+
+Integrate the TypeScript declaration repairs and injectable fetch support.
+Align CommonJS, ESM, default and named exports, make test commands portable,
+and enforce deterministic offline coverage with supported CI runners.
+
+Fixes #55
+Fixes #57

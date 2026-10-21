@@ -11,7 +11,7 @@ type TSheetName = string
 type TGID = string
 type TOption = TSheetName | ISheetOption
 
-export class PublicGoogleSheetsParser {
+declare class PublicGoogleSheetsParser {
   private id?: TSpreadSheetId
   private sheetName?: TSheetName
   private sheetId?: TGID
@@ -30,4 +30,8 @@ export class PublicGoogleSheetsParser {
   parse(spreadsheetId?: TSpreadSheetId, option?: TOption): Promise<any[]>
 }
 
-export default PublicGoogleSheetsParser
+declare namespace PublicGoogleSheetsParser {
+  export { PublicGoogleSheetsParser, PublicGoogleSheetsParser as default }
+}
+
+export = PublicGoogleSheetsParser

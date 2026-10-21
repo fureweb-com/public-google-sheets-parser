@@ -1,5 +1,5 @@
 const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined'
-const defaultFetch = isBrowser ? /* istanbul ignore next */window.fetch : require('../src/fetch')
+const defaultFetch = isBrowser ? window.fetch : require('../src/fetch')
 
 class PublicGoogleSheetsParser {
   constructor (spreadsheetId, option) {
@@ -39,11 +39,9 @@ class PublicGoogleSheetsParser {
     try {
       const fetcher = this.fetch || defaultFetch
       const response = await fetcher(url)
-      return response && response.ok ? response.text() : null
+      return response && response.ok ? await response.text() : null
     } catch (e) {
-      /* istanbul ignore next */
       console.error('Error fetching spreadsheet data:', e)
-      /* istanbul ignore next */
       return null
     }
   }
@@ -66,8 +64,8 @@ class PublicGoogleSheetsParser {
     try {
       const payloadExtractRegex = /google\.visualization\.Query\.setResponse\(({.*})\);/
       const match = spreadsheetResponse.match(payloadExtractRegex)
-      const payload = match && match[1]
-      const parsedJSON = JSON.parse(payload)
+      if (!match) return []
+      const parsedJSON = JSON.parse(match[1])
       const hasSomeLabelPropertyInCols = parsedJSON.table.cols.some(({ label }) => !!label)
       if (hasSomeLabelPropertyInCols) {
         const header = parsedJSON.table.cols.map(({ label }) => label)
@@ -80,7 +78,6 @@ class PublicGoogleSheetsParser {
         rows = this.applyHeaderIntoRows(header, originalRows)
       }
     } catch (e) {
-      /* istanbul ignore next */
       console.error('Error parsing spreadsheet data:', e)
     }
 
@@ -107,4 +104,5 @@ if (isBrowser && typeof module === 'undefined') {
 } else {
   module.exports = PublicGoogleSheetsParser
   module.exports.default = PublicGoogleSheetsParser
+  module.exports.PublicGoogleSheetsParser = PublicGoogleSheetsParser
 }

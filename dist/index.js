@@ -9,9 +9,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
-const defaultFetch = isBrowser ?
-/* istanbul ignore next */
-window.fetch : require('../src/fetch');
+const defaultFetch = isBrowser ? window.fetch : require('../src/fetch');
 
 let PublicGoogleSheetsParser = /*#__PURE__*/function () {
   function PublicGoogleSheetsParser(spreadsheetId, option) {
@@ -57,12 +55,9 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
         try {
           const fetcher = this.fetch || defaultFetch;
           const response = yield fetcher(url);
-          return response && response.ok ? response.text() : null;
+          return response && response.ok ? yield response.text() : null;
         } catch (e) {
-          /* istanbul ignore next */
           console.error('Error fetching spreadsheet data:', e);
-          /* istanbul ignore next */
-
           return null;
         }
       });
@@ -95,8 +90,8 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
       try {
         const payloadExtractRegex = /google\.visualization\.Query\.setResponse\(({.*})\);/;
         const match = spreadsheetResponse.match(payloadExtractRegex);
-        const payload = match && match[1];
-        const parsedJSON = JSON.parse(payload);
+        if (!match) return [];
+        const parsedJSON = JSON.parse(match[1]);
         const hasSomeLabelPropertyInCols = parsedJSON.table.cols.some(({
           label
         }) => !!label);
@@ -112,7 +107,6 @@ let PublicGoogleSheetsParser = /*#__PURE__*/function () {
           rows = this.applyHeaderIntoRows(header, originalRows);
         }
       } catch (e) {
-        /* istanbul ignore next */
         console.error('Error parsing spreadsheet data:', e);
       }
 
@@ -148,4 +142,5 @@ if (isBrowser && typeof module === 'undefined') {
 } else {
   module.exports = PublicGoogleSheetsParser;
   module.exports.default = PublicGoogleSheetsParser;
+  module.exports.PublicGoogleSheetsParser = PublicGoogleSheetsParser;
 }

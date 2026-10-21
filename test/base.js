@@ -73,28 +73,40 @@ class Test {
   }
 
   attachOfflineSpreadsheetMock () {
-    this.parser.getSpreadsheetDataUsingFetch = async function () {
-      if (!this.id || this.id === 'invalid-id' || this.id === 'id_that_does_not_exist_anywhere') return null
+    this.parser.setOption({
+      fetch: async (url) => {
+        const request = new URL(url)
+        const id = request.pathname.split('/')[3]
+        const gid = request.searchParams.get('gid')
+        const sheetName = request.searchParams.get('sheet')
+        let payload = null
 
-      if (this.id === '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps') {
-        if (this.sheetId === '784337977' || this.sheetName === 'Sheet2') return SHEET_FIXTURES.sheet2
-        if (this.sheetId === '621371424' || this.sheetName === 'Sheet3') return SHEET_FIXTURES.sheet3
-        return SHEET_FIXTURES.sheet1
+        if (id === '10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps') {
+          const sheetsById = { 1839148703: 'sheet1', 784337977: 'sheet2', 621371424: 'sheet3' }
+          const sheetsByName = { Sheet1: 'sheet1', Sheet2: 'sheet2', Sheet3: 'sheet3' }
+          const sheet = gid ? sheetsById[gid] : sheetsByName[sheetName] || 'sheet1'
+          payload = SHEET_FIXTURES[sheet]
+        } else if (id === '1K5oodBEghRG66WCPBumRTcexp70bZprfaXovqvoxNac') {
+          payload = HOLIDAY_FIXTURES[sheetName]
+        } else if (id === '15czdGBtjjA82zpp6Xh4CY9OWs4hUpO4ul7mk6VNPGEg') {
+          payload = SHEET_FIXTURES.noLabels
+        } else if (id === '1hAT59kWFcDSNs9X0puWbylioEIhVnzUtHz6YhYQZ5cw') {
+          payload = SHEET_FIXTURES.withEmptyCells
+        }
+
+        return { ok: !!payload, text: async () => payload }
       }
-
-      if (this.id === '1K5oodBEghRG66WCPBumRTcexp70bZprfaXovqvoxNac') {
-        return HOLIDAY_FIXTURES[this.sheetName] || null
-      }
-
-      if (this.id === '15czdGBtjjA82zpp6Xh4CY9OWs4hUpO4ul7mk6VNPGEg') return SHEET_FIXTURES.noLabels
-      if (this.id === '1hAT59kWFcDSNs9X0puWbylioEIhVnzUtHz6YhYQZ5cw') return SHEET_FIXTURES.withEmptyCells
-
-      return null
-    }
+    })
   }
 
   test () {
     this.attachOfflineSpreadsheetMock()
+
+    test('CommonJS, default and named exports should expose the same constructor', (t) => {
+      t.equal(this.PublicGoogleSheetsParser.default, this.PublicGoogleSheetsParser)
+      t.equal(this.PublicGoogleSheetsParser.PublicGoogleSheetsParser, this.PublicGoogleSheetsParser)
+      t.end()
+    })
 
     test('getSpreadsheetDataUsingFetch method should return expected result', async (t) => {
       const resultWithoutSpreadsheetId = await this.parser.getSpreadsheetDataUsingFetch()
@@ -139,6 +151,9 @@ class Test {
       const byId = await this.parser.parse(spreadsheetId, { sheetId: '784337977' })
       t.deepEqual(byName, [{ a: 10, b: 20, c: 30 }, { a: 40, b: 50, c: 60 }, { a: 70, b: 80, c: 90 }])
       t.deepEqual(byId, byName)
+      const byIdWithConflictingName = await this.parser.parse(spreadsheetId, { sheetName: 'Sheet2', sheetId: '1839148703' })
+      t.deepEqual(byIdWithConflictingName, [{ a: 1, b: 2, c: 3 }, { a: 4, b: 5, c: 6 }, { a: 7, b: 8, c: 9 }])
+      this.parser.sheetId = null
       t.end()
     })
 
@@ -164,7 +179,6 @@ class Test {
 
     test('should throw when parse before set spreadsheetId', async (t) => {
       const localParser = new this.PublicGoogleSheetsParser()
-      localParser.getSpreadsheetDataUsingFetch = async () => null
       const actualError = await localParser.parse().catch((e) => e)
       t.deepEqual(actualError, new Error('SpreadsheetId is required.'))
       t.end()
@@ -238,14 +252,97 @@ class Test {
     })
 
     test('getSpreadsheetDataUsingFetch method should handle errors properly with injected fetch', async (t) => {
+      const originalError = console.error
+      const errors = []
       const parser = new this.PublicGoogleSheetsParser('10WDbAPAY7Xl5DT36VuMheTPTTpqx9x0C5sDCnh4BGps', {
         fetch: async () => {
           throw new Error('forced fetch error')
         }
       })
 
-      const result = await parser.getSpreadsheetDataUsingFetch()
-      t.equal(result, null)
+      console.error = (...args) => errors.push(args)
+      try {
+        const result = await parser.getSpreadsheetDataUsingFetch()
+        t.equal(result, null)
+        t.equal(errors[0][1].message, 'forced fetch error')
+      } finally {
+        console.error = originalError
+      }
+      t.end()
+    })
+
+    test('setOption should retain settings and handle objects without hasOwnProperty', (t) => {
+      const parser = new this.PublicGoogleSheetsParser('id', 'Sheet1')
+      const fetch = async () => null
+      parser.setOption(Object.assign(Object.create(null), {
+        sheetId: '123', useFormat: true, useFormattedDate: true, fetch
+      }))
+      parser.setOption()
+      t.equal(parser.sheetName, 'Sheet1')
+      t.equal(parser.sheetId, '123')
+      t.equal(parser.useFormat, true)
+      t.equal(parser.useFormattedDate, true)
+      parser.setOption({ hasOwnProperty: null, useFormat: false, useFormattedDate: false, fetch: null })
+      t.equal(parser.useFormat, false)
+      t.equal(parser.useFormattedDate, false)
+      t.equal(parser.fetch, fetch, 'unrelated options retain the custom transport')
+      parser.setOption('Sheet2')
+      t.equal(parser.sheetId, '123', 'sheet ID is retained when changing the sheet name')
+      parser.setOption(42)
+      t.equal(parser.sheetName, 'Sheet2', 'unsupported options do not overwrite existing settings')
+      t.end()
+    })
+
+    test('parse should handle empty and unsuccessful fetch responses', async (t) => {
+      const parser = new this.PublicGoogleSheetsParser('id', { fetch: async () => null })
+      t.deepEqual(await parser.parse(), [])
+      parser.setOption({ fetch: async () => ({ ok: false, text: () => { throw new Error('must not read failed responses') } }) })
+      t.deepEqual(await parser.parse(), [])
+      t.end()
+    })
+
+    test('parse should handle a rejected response body like a failed request', async (t) => {
+      const originalError = console.error
+      const errors = []
+      const parser = new this.PublicGoogleSheetsParser('id', {
+        fetch: async () => ({ ok: true, text: async () => { throw new Error('body read failed') } })
+      })
+      console.error = (...args) => errors.push(args)
+      try {
+        t.deepEqual(await parser.parse(), [])
+        t.equal(errors[0][1].message, 'body read failed')
+      } finally {
+        console.error = originalError
+      }
+      t.end()
+    })
+
+    test('getItems should reject malformed responses and preserve callback text in cells', (t) => {
+      const parser = new this.PublicGoogleSheetsParser()
+      const originalError = console.error
+      const errors = []
+      console.error = (...args) => errors.push(args)
+      try {
+        t.deepEqual(parser.getItems('not a gviz response'), [])
+        t.deepEqual(parser.getItems('google.visualization.Query.setResponse({invalid});'), [])
+        t.deepEqual(parser.getItems('google.visualization.Query.setResponse({});'), [])
+        t.equal(errors.length, 2, 'invalid payloads are reported without throwing')
+      } finally {
+        console.error = originalError
+      }
+      const value = 'keep google.visualization.Query.setResponse( and ); inside the value'
+      t.deepEqual(parser.getItems(wrapGvizResponse({
+        cols: [{ label: 'text' }], rows: [{ c: [{ v: value }] }]
+      })), [{ text: value }])
+      t.end()
+    })
+
+    test('formatting should preserve false, zero and dates without formatted values', (t) => {
+      const parser = new this.PublicGoogleSheetsParser('id', { useFormattedDate: true })
+      const rows = [{ c: [{ v: false }, { v: 0 }, { v: 'Date(2024,0,1)', f: '' }] }]
+      t.deepEqual(parser.applyHeaderIntoRows(['flag', 'count', 'date'], rows), [
+        { flag: false, count: 0, date: 'Date(2024,0,1)' }
+      ])
       t.end()
     })
 

@@ -22,6 +22,7 @@ The Public Google Sheets Parser is a zero-dependency library that enables the us
 - **Sheet Name or GID Selection:** Fetch data from specific sheets by name or GID (since v1.1.0 and v1.3.0 respectively).
 - **Formatted Dates:** While you can opt to retrieve dates in their displayed format within the spreadsheet with `useFormattedDate` (since v1.4.0), it is recommended to use the `useFormat` option available since v1.5.0 for more precise control and accuracy. The `useFormat` option ensures that both numeric and date values are returned in their formatted string representations as they appear in your Google Sheets, providing a more accurate and consistent result.
 - **Custom Formatting:** Leverage `useFormat` to get numeric and date values as formatted in Google Sheets (since v1.5.0).
+- **Custom Fetch:** Supply your own request function for tests, retries, or request logging (since v1.6.0).
 - **Browser and Node.js Support:** Utilize in various environments though note it requires Fetch API compatibility.
 - **API Access:** No API key required for the SDK; access data through the provided free API for public sheets.
 
@@ -35,6 +36,8 @@ npm i public-google-sheets-parser
 
 ### Testing
 
+Install development dependencies with `yarn install --frozen-lockfile`. These commands work on Windows, macOS, and Linux; npm users can run the same scripts with `npm run <script>`.
+
 ```bash
 # Offline-safe unit tests (default)
 yarn test
@@ -45,9 +48,17 @@ yarn test:dist
 # Optional: run live network integration test(s)
 yarn test:integration
 
-# Verify TypeScript declaration files
+# Compile and run TypeScript consumers, and check native ESM imports
 yarn test:types
+
+# Enforce 100% statement, branch, function and line coverage offline
+yarn coverage
+
+# Check JavaScript style
+yarn lint
 ```
+
+Only `test:integration` contacts Google Sheets. The unit suite exercises the real parser with injected responses and tests the Node transport at the HTTPS boundary. `test:dist` rebuilds the checked-in browser bundle before testing it. TypeScript is pinned in the development dependencies so `test:types` does not download a compiler at test time. CI runs lint, coverage, dist, and TypeScript checks on Linux and Windows with Node.js 22 and 24; live integration tests remain opt-in.
 
 ### Usage
 
@@ -58,6 +69,13 @@ const spreadsheetId = 'your_spreadsheet_id_here'
 const parser = new PublicGoogleSheetsParser(spreadsheetId)
 
 parser.parse().then(console.log)
+```
+
+TypeScript and ESM consumers can use either the default export or the named export:
+
+```javascript
+import PublicGoogleSheetsParser from 'public-google-sheets-parser'
+// Or: import { PublicGoogleSheetsParser } from 'public-google-sheets-parser'
 ```
 
 Browser:
@@ -132,8 +150,20 @@ export default SpreadsheetData
 - `useFormattedDate`: Although you can parse date values according to the spreadsheet's format using `useFormattedDate`, it is now recommended to use the `useFormat` option for more comprehensive and precise formatting control. The `useFormat` option not only affects dates but also applies to numeric values, ensuring consistency and accuracy across your data.
 
 - `useFormat`: Get data as formatted in the spreadsheet (applies to numbers and dates).
-- `fetch`: Inject a custom `fetch` implementation for testing or unsupported environments.
+- `fetch`: Optional function receiving the generated URL and returning a promise for a response with `ok` and an asynchronous `text()` method. When omitted, the parser uses its browser or Node.js transport. The function can also be replaced with `setOption({ fetch: customFetch })`; changing other options retains it.
 - Specify sheet by name or GID to target specific data ranges.
+
+For example, a test can provide a response without making a network request:
+
+```javascript
+const parser = new PublicGoogleSheetsParser('test-sheet', {
+  fetch: async (url) => ({
+    ok: true,
+    text: async () => 'google.visualization.Query.setResponse({"table":{"cols":[{"label":"name"}],"rows":[{"c":[{"v":"Alice"}]}]}});'
+  })
+})
+parser.parse().then(console.log) // [{ name: 'Alice' }]
+```
 
 ### Example with Options:
 ```javascript
