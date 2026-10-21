@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "target": "ES2019",
+    "outDir": "./out",
+    "noEmitOnError": true
+  },
+  "files": ["usage.ts", "usage.mts"]
+}

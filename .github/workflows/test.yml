@@ -1,24 +1,45 @@
 name: tests with tape and check code coverage
 
-on: [push, pull_request]
+on: [pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [22, 24]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
 
       - name: setup node
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v7
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node }}
+          package-manager-cache: false
 
-      - run: yarn && yarn coverage
+      - run: npm install --global yarn@1.22.22
+
+      - run: yarn install --frozen-lockfile
+
+      - run: yarn lint
+
+      - run: yarn coverage
+
+      - run: yarn test:dist
+
+      - run: yarn test:types
 
       - name: upload coverage to codecov
-        uses: codecov/codecov-action@v4
+        if: matrix.os == 'ubuntu-latest' && matrix.node == 24
+        uses: codecov/codecov-action@v5
         with:
+          files: ./coverage/lcov.info
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
           verbose: true
